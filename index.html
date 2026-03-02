@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CityLens Demo — AI Property Intelligence | Chhatrapati Sambhajinagar</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --db:#0D1B2A; --navy:#1B335C; --orange:#F06A1A;
+  --sky:#007EB5; --green:#007A4E; --red:#C00000;
+  --yellow:#B07800; --white:#fff; --light:#F0F4F8; --gray:#556572;
+}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a1a;background:#fff}
+
+/* ── NAV ── */
+nav{background:var(--db);padding:0 2rem;display:flex;align-items:center;
+  justify-content:space-between;height:60px;position:sticky;top:0;z-index:1000;
+  box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.nav-logo{color:#fff;font-size:1.5rem;font-weight:800;letter-spacing:-0.5px}
+.nav-logo span{color:var(--orange)}
+.nav-badge{background:var(--orange);color:#fff;font-size:.6rem;padding:2px 7px;
+  border-radius:3px;margin-left:6px;vertical-align:middle;font-weight:700;letter-spacing:1px}
+.nav-links a{color:rgba(255,255,255,.7);text-decoration:none;margin-left:1.5rem;
+  font-size:.85rem;transition:color .2s}
+.nav-links a:hover{color:var(--orange)}
+@media(max-width:700px){.nav-links{display:none}}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,var(--db) 0%,var(--navy) 100%);
+  color:#fff;padding:5rem 2rem 4rem;text-align:center;overflow:hidden;position:relative}
+.hero::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(0,180,216,.10) 0%,transparent 70%)}
+.hero-tag{display:inline-block;background:rgba(240,106,26,.15);border:1px solid var(--orange);
+  color:var(--orange);padding:4px 14px;border-radius:20px;font-size:.72rem;font-weight:700;
+  letter-spacing:1px;margin-bottom:1.5rem}
+.hero h1{font-size:3rem;font-weight:800;line-height:1.15;margin-bottom:1rem}
+.hero h1 em{color:var(--orange);font-style:normal}
+.hero p{font-size:1.05rem;color:rgba(255,255,255,.75);max-width:640px;
+  margin:0 auto 2.5rem;line-height:1.75}
+.stats-row{display:flex;justify-content:center;gap:3rem;margin-bottom:2.5rem;flex-wrap:wrap}
+.stat-num{font-size:2.2rem;font-weight:800;color:var(--orange);line-height:1}
+.stat-label{font-size:.72rem;color:rgba(255,255,255,.55);margin-top:4px;
+  text-transform:uppercase;letter-spacing:.5px}
+.demo-loc{display:inline-flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.15);
+  border-radius:6px;padding:10px 18px;font-size:.82rem;color:rgba(255,255,255,.8);margin-bottom:2rem}
+.cta-btn{display:inline-block;background:var(--orange);color:#fff;
+  padding:14px 32px;border-radius:6px;font-size:1rem;font-weight:700;
+  text-decoration:none;transition:all .2s}
+.cta-btn:hover{box-shadow:0 8px 24px rgba(240,106,26,.45);transform:translateY(-2px)}
+
+/* ── SECTIONS ── */
+section{padding:4rem 2rem}
+section:nth-child(even){background:var(--light)}
+.section-header{text-align:center;margin-bottom:2.5rem}
+.section-tag{display:inline-block;background:rgba(0,126,181,.12);color:var(--sky);
+  padding:3px 12px;border-radius:20px;font-size:.7rem;font-weight:700;letter-spacing:1px;margin-bottom:.5rem}
+.section-header h2{font-size:2rem;font-weight:800;color:var(--db)}
+.section-header p{color:var(--gray);font-size:.95rem;max-width:600px;margin:.5rem auto 0;line-height:1.7}
+
+/* ── MAP ── */
+.map-container{position:relative;border-radius:12px;overflow:hidden;
+  box-shadow:0 4px 30px rgba(0,0,0,.15);max-width:1100px;margin:0 auto}
+#city-map{height:520px;width:100%}
+.map-legend{position:absolute;bottom:30px;right:10px;background:#fff;border-radius:8px;
+  padding:12px 14px;box-shadow:0 2px 10px rgba(0,0,0,.15);z-index:500;font-size:.76rem}
+.legend-title{font-weight:700;margin-bottom:6px;color:var(--db)}
+.legend-item{display:flex;align-items:center;gap:6px;margin:4px 0}
+.legend-dot{width:11px;height:11px;border-radius:50%}
+.map-controls{display:flex;gap:1rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
+.map-btn{padding:10px 22px;border:none;border-radius:6px;font-size:.88rem;
+  font-weight:700;cursor:pointer;transition:all .2s}
+.map-btn:hover{opacity:.85;transform:translateY(-1px)}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-navy{background:var(--navy);color:#fff}
+.scan-log{max-width:1100px;margin:1rem auto 0;background:var(--db);border-radius:8px;
+  padding:1rem 1.5rem;font-family:'Courier New',monospace;font-size:.75rem;
+  color:#0f0;min-height:80px;max-height:120px;overflow-y:auto;display:none}
+.scan-log .log-line{margin-bottom:3px}
+.scan-log .log-ok{color:#00ff88}
+.scan-log .log-warn{color:var(--orange)}
+.scan-log .log-info{color:#7EB8D4}
+
+/* ── BEFORE/AFTER ── */
+.comparison-wrapper{max-width:900px;margin:0 auto}
+.comp-outer{position:relative;width:100%;height:420px;border-radius:12px;
+  overflow:hidden;cursor:ew-resize;box-shadow:0 4px 30px rgba(0,0,0,.15)}
+.sat-before,.sat-after{position:absolute;inset:0}
+
+/* Simulated aerial view — BEFORE (Jan 2025) */
+.sat-before{
+  background:
+    linear-gradient(180deg,#3D5A80 0%,#3D5A80 6px,transparent 6px),
+    linear-gradient(90deg,#3D5A80 0%,#3D5A80 6px,transparent 6px),
+    #6B5B47;
+  background-size:120px 120px,120px 120px,100%}
+.sat-before::before{content:'';position:absolute;inset:0;background:
+    /* Road horizontal */
+    linear-gradient(#9A8A78,#9A8A78) 0 200px / 100% 22px,
+    /* Road vertical */
+    linear-gradient(#9A8A78,#9A8A78) 300px 0 / 22px 100%,
+    /* Building 1 — 2 floors */
+    linear-gradient(160deg,#C8B898,#A09068) 60px 80px / 100px 75px,
+    /* Building 2 */
+    linear-gradient(160deg,#D4C4A0,#B0A070) 200px 90px / 80px 65px,
+    /* MGM Auditorium */
+    linear-gradient(160deg,#B8A888,#988060) 380px 70px / 150px 110px,
+    /* Vegetation patch */
+    radial-gradient(ellipse,#3E6B3E,#254525) 160px 290px / 120px 90px,
+    /* Parking */
+    linear-gradient(#7A7060,#6A6050) 390px 200px / 130px 60px;
+  background-repeat:no-repeat}
+
+/* AFTER (Jan 2026) — shows changes */
+.sat-after{
+  clip-path:inset(0 50% 0 0);
+  background:
+    linear-gradient(180deg,#3D5A80 0%,#3D5A80 6px,transparent 6px),
+    linear-gradient(90deg,#3D5A80 0%,#3D5A80 6px,transparent 6px),
+    #6B5B47;
+  background-size:120px 120px,120px 120px,100%}
+.sat-after::before{content:'';position:absolute;inset:0;background:
+    /* Roads same */
+    linear-gradient(#9A8A78,#9A8A78) 0 200px / 100% 22px,
+    linear-gradient(#9A8A78,#9A8A78) 300px 0 / 22px 100%,
+    /* Building 1 — NOW 3 floors (brighter top) */
+    linear-gradient(160deg,#E0D0B0,#C0A878) 60px 80px / 100px 75px,
+    /* NEW FLOOR addition on bldg 1 — lighter shade */
+    linear-gradient(160deg,#F0E8D0,#D8C8A0) 60px 55px / 100px 28px,
+    /* FOOTPRINT EXPANSION — side addition */
+    linear-gradient(160deg,#D8D0B8,#C0B898) 158px 80px / 30px 75px,
+    /* Building 2 same */
+    linear-gradient(160deg,#D4C4A0,#B0A070) 200px 90px / 80px 65px,
+    /* MGM Auditorium same */
+    linear-gradient(160deg,#B8A888,#988060) 380px 70px / 150px 110px,
+    /* NEW CONSTRUCTION (vacant→built) */
+    linear-gradient(160deg,#E8E0C8,#D0C8A8) 550px 80px / 90px 80px,
+    /* Vegetation */
+    radial-gradient(ellipse,#3E6B3E,#254525) 160px 290px / 120px 90px,
+    /* Parking */
+    linear-gradient(#7A7060,#6A6050) 390px 200px / 130px 60px;
+  background-repeat:no-repeat}
+/* Red change highlights */
+.sat-after::after{content:'';position:absolute;inset:0;background:
+    rgba(192,0,0,.35) 55px 50px / 110px 35px,
+    rgba(192,0,0,.3) 150px 75px / 40px 82px,
+    rgba(240,106,26,.4) 545px 74px / 100px 90px;
+  background-repeat:no-repeat}
+
+.comp-divider{position:absolute;top:0;left:50%;width:4px;height:100%;
+  background:#fff;z-index:20;transform:translateX(-50%);pointer-events:none}
+.comp-handle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:42px;height:42px;background:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;
+  box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.img-label{position:absolute;top:14px;background:rgba(0,0,0,.7);color:#fff;
+  padding:5px 12px;border-radius:4px;font-size:.78rem;font-weight:700;z-index:30}
+.label-before{left:14px}
+.label-after{right:14px;pointer-events:none}
+.change-tags{display:flex;gap:1rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center}
+.change-tag{display:flex;align-items:center;gap:8px;padding:8px 16px;
+  border-radius:6px;font-size:.82rem;font-weight:600}
+.tag-red{background:rgba(192,0,0,.1);color:var(--red);border:1px solid rgba(192,0,0,.3)}
+.tag-orange{background:rgba(240,106,26,.1);color:var(--orange);border:1px solid rgba(240,106,26,.3)}
+
+/* ── AI PIPELINE ── */
+.pipeline{display:flex;align-items:stretch;max-width:1150px;margin:0 auto;gap:0;overflow-x:auto}
+.pipe-mod{flex:1;min-width:170px;background:#fff;border-radius:10px;padding:1.4rem 1rem;
+  text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.08);border-top:4px solid var(--sky);
+  transition:transform .3s,box-shadow .3s}
+.pipe-mod:hover{transform:translateY(-4px);box-shadow:0 10px 28px rgba(0,0,0,.12)}
+.pipe-mod.active-mod{border-top-color:var(--orange);background:#FFF8F4}
+.pipe-arrow{display:flex;align-items:center;padding:0 .3rem;color:var(--sky);
+  font-size:1.4rem;flex-shrink:0}
+.mod-num{width:30px;height:30px;background:var(--sky);color:#fff;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.8rem;
+  font-weight:800;margin:0 auto .7rem}
+.pipe-mod.active-mod .mod-num{background:var(--orange)}
+.mod-icon{font-size:1.7rem;margin-bottom:.4rem}
+.mod-name{font-size:.82rem;font-weight:800;color:var(--db);margin-bottom:.3rem}
+.mod-algo{font-size:.68rem;color:var(--sky);font-weight:700;background:rgba(0,126,181,.1);
+  padding:2px 8px;border-radius:10px;margin-bottom:.6rem;display:inline-block}
+.pipe-mod.active-mod .mod-algo{color:var(--orange);background:rgba(240,106,26,.1)}
+.mod-desc{font-size:.72rem;color:var(--gray);line-height:1.5}
+.mod-out{margin-top:.7rem;padding:5px 8px;background:var(--light);border-radius:5px;
+  font-size:.7rem;color:var(--navy);font-weight:700}
+.conf-bar{margin-top:.7rem;background:#DDE4EC;border-radius:4px;height:5px;overflow:hidden}
+.conf-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sky),var(--green));
+  width:0;transition:width 1.2s .3s}
+.pipe-mod.active-mod .conf-fill{background:linear-gradient(90deg,var(--orange),var(--red))}
+.conf-label{font-size:.65rem;color:var(--gray);text-align:right;margin-top:2px}
+.pipe-status{max-width:1150px;margin:1.5rem auto 0;background:var(--db);
+  border-radius:8px;padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem}
+.pipe-status-txt{font-size:.82rem;color:rgba(255,255,255,.8);font-weight:600;white-space:nowrap}
+.pipe-prog-wrap{flex:1;background:rgba(255,255,255,.15);border-radius:4px;height:8px;overflow:hidden}
+.pipe-prog{height:100%;background:linear-gradient(90deg,var(--orange),var(--sky));
+  border-radius:4px;width:0;transition:width .4s}
+.pipe-result{font-size:.8rem;color:#00ff88;font-weight:700;white-space:nowrap}
+
+/* ── DASHBOARD ── */
+.dash-wrap{max-width:1150px;margin:0 auto}
+.dash-topbar{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:1rem;flex-wrap:wrap;gap:.5rem}
+.dash-topbar h3{font-size:1rem;color:var(--db);font-weight:700}
+.chips{display:flex;gap:.4rem;flex-wrap:wrap}
+.chip{padding:5px 14px;border-radius:20px;font-size:.72rem;font-weight:700;
+  cursor:pointer;border:2px solid transparent;transition:all .2s;user-select:none}
+.chip-all{background:var(--navy);color:#fff}
+.chip-high{background:rgba(192,0,0,.1);color:var(--red);border-color:rgba(192,0,0,.3)}
+.chip-med{background:rgba(176,120,0,.1);color:var(--yellow);border-color:rgba(176,120,0,.3)}
+.chip-low{background:rgba(0,122,78,.1);color:var(--green);border-color:rgba(0,122,78,.3)}
+.chip.active-chip{opacity:1;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+table{width:100%;border-collapse:separate;border-spacing:0;border-radius:10px;
+  overflow:hidden;box-shadow:0 2px 15px rgba(0,0,0,.08)}
+thead th{background:var(--navy);color:#fff;padding:11px 14px;text-align:left;
+  font-size:.76rem;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+tbody tr{background:#fff;cursor:pointer;transition:background .15s}
+tbody tr:hover{background:rgba(0,126,181,.05)}
+tbody tr:nth-child(even){background:#FAFCFF}
+tbody tr:nth-child(even):hover{background:rgba(0,126,181,.05)}
+td{padding:10px 14px;font-size:.79rem;border-bottom:1px solid #EDF0F5;color:#333}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:.67rem;
+  font-weight:800;text-transform:uppercase;letter-spacing:.3px}
+.b-high{background:rgba(192,0,0,.12);color:var(--red)}
+.b-med{background:rgba(176,120,0,.12);color:var(--yellow)}
+.b-low{background:rgba(0,122,78,.12);color:var(--green)}
+.b-done{background:rgba(0,126,181,.12);color:var(--sky)}
+.b-type{background:rgba(27,51,92,.1);color:var(--navy)}
+.vbtn{padding:5px 11px;background:var(--sky);color:#fff;border:none;border-radius:5px;
+  font-size:.72rem;font-weight:700;cursor:pointer;transition:background .2s}
+.vbtn:hover{background:var(--navy)}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);
+  z-index:3000;justify-content:center;align-items:center}
+.modal-overlay.open{display:flex}
+.modal{background:#fff;border-radius:12px;width:90%;max-width:720px;
+  max-height:88vh;overflow-y:auto;padding:2rem;position:relative}
+.mclose{position:absolute;top:1rem;right:1rem;background:none;border:none;
+  font-size:1.4rem;cursor:pointer;color:var(--gray)}
+.modal h3{color:var(--db);font-size:1.25rem;margin-bottom:.2rem}
+.modal-id{color:var(--sky);font-size:.8rem;font-weight:700;margin-bottom:1.2rem}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem}
+@media(max-width:600px){.mgrid{grid-template-columns:1fr}}
+.mfield label{display:block;font-size:.67rem;color:var(--gray);text-transform:uppercase;
+  letter-spacing:.5px;margin-bottom:3px}
+.mfield span{font-size:.88rem;color:var(--db);font-weight:700}
+.ai-scores-box{background:var(--light);border-radius:8px;padding:1rem;margin-bottom:1.4rem}
+.ai-scores-box h4{font-size:.82rem;color:var(--navy);margin-bottom:.8rem;font-weight:800}
+.score-row{display:flex;align-items:center;gap:.8rem;margin-bottom:.5rem}
+.score-lbl{font-size:.72rem;color:var(--gray);width:140px;flex-shrink:0}
+.score-bar{flex:1;background:#DDE4EC;border-radius:4px;height:7px}
+.score-fill{height:100%;border-radius:4px;background:var(--green);transition:width 1s .2s}
+.score-pct{font-size:.72rem;font-weight:800;color:var(--navy);width:36px;text-align:right}
+.tl{margin-bottom:1.4rem}
+.tl h4{font-size:.82rem;color:var(--navy);margin-bottom:.8rem;font-weight:800}
+.tl-item{display:flex;gap:.8rem;margin-bottom:.7rem}
+.tl-dots{display:flex;flex-direction:column;align-items:center}
+.tl-dot{width:11px;height:11px;border-radius:50%;background:var(--sky);flex-shrink:0}
+.tl-line{width:2px;flex:1;background:#DDE4EC;min-height:18px}
+.tl-date{font-size:.68rem;color:var(--gray)}
+.tl-event{font-size:.79rem;color:var(--db);font-weight:600}
+.gen-btn{width:100%;padding:12px;background:var(--orange);color:#fff;border:none;
+  border-radius:8px;font-size:.95rem;font-weight:700;cursor:pointer;transition:all .2s}
+.gen-btn:hover{background:#D45A0A;transform:translateY(-1px)}
+
+/* ── NOTICE ── */
+.notice-wrap{max-width:750px;margin:0 auto}
+.notice-doc{background:#fff;border:2px solid #DDE4EC;border-radius:8px;
+  padding:2.5rem;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+.notice-hdr{text-align:center;border-bottom:3px solid var(--navy);padding-bottom:1rem;margin-bottom:1.5rem}
+.govt-name{font-size:1rem;font-weight:800;color:var(--navy);margin-bottom:.2rem}
+.dept-name{font-size:.78rem;color:var(--gray)}
+.notice-title{font-size:.95rem;font-weight:800;color:var(--red);text-transform:uppercase;
+  margin:1rem 0 1.5rem;letter-spacing:.5px;text-align:center}
+.notice-ref{display:flex;justify-content:space-between;margin-bottom:1.5rem}
+.notice-ref span{font-size:.78rem;color:var(--gray)}
+.notice-body{font-size:.84rem;line-height:1.85;color:#333}
+.notice-body p{margin-bottom:.9rem}
+.nd-table{width:100%;border-collapse:collapse;margin:1rem 0;font-size:.8rem}
+.nd-table td{border:1px solid #DDE4EC;padding:8px 12px}
+.nd-table td:first-child{background:var(--light);font-weight:700;color:var(--navy);width:42%}
+.notice-sig{margin-top:2rem;display:flex;justify-content:flex-end}
+.sig-block{text-align:center}
+.sig-line{width:180px;border-top:2px solid #333;margin:.5rem auto}
+.sig-name{font-size:.82rem;font-weight:800;color:var(--navy)}
+.sig-title{font-size:.72rem;color:var(--gray)}
+.ai-stamp{display:inline-flex;align-items:center;gap:6px;background:rgba(0,122,78,.1);
+  border:1px solid rgba(0,122,78,.3);color:var(--green);padding:5px 12px;
+  border-radius:4px;font-size:.7rem;font-weight:700;margin-top:1rem}
+
+/* ── FOOTER ── */
+footer{background:var(--db);color:rgba(255,255,255,.5);text-align:center;
+  padding:2rem;font-size:.8rem}
+footer strong{color:var(--orange)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .pipeline{flex-direction:column}
+  .pipe-arrow{transform:rotate(90deg);align-self:center}
+  .hero h1{font-size:2.2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">City<span>Lens</span><span class="nav-badge">DEMO</span></div>
+  <div class="nav-links">
+    <a href="#s-map">RevMap</a>
+    <a href="#s-detect">Detection</a>
+    <a href="#s-pipe">AI Pipeline</a>
+    <a href="#s-dash">Dashboard</a>
+    <a href="#s-notice">AutoNotice</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">TRACK 5 — GOVERNANCE &amp; SMART ADMINISTRATION</div>
+  <h1>AI sees what manual<br><em>surveys miss</em></h1>
+  <p>CityLens uses satellite imagery + deep learning to detect unauthorized property changes
+     in real-time — turning a 3–5 year survey cycle into a 5-day automated alert system for
+     Chhatrapati Sambhajinagar.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-num">500K+</div><div class="stat-label">Property Parcels</div></div>
+    <div class="stat"><div class="stat-num">5-Day</div><div class="stat-label">Satellite Revisit</div></div>
+    <div class="stat"><div class="stat-num">94%</div><div class="stat-label">AI Accuracy</div></div>
+    <div class="stat"><div class="stat-num">40%</div><div class="stat-label">Revenue Recovery</div></div>
+  </div>
+  <div class="demo-loc">📍 Demo Area: MGM University, Rukmani Auditorium, N-6, CSM — 431003</div>
+  <br><br>
+  <a href="#s-map" class="cta-btn">View Live RevMap ↓</a>
+</div>
+
+<!-- ════ STEP 1: MAP ════ -->
+<section id="s-map">
+  <div class="section-header">
+    <div class="section-tag">STEP 1 — REVMAP</div>
+    <h2>Live Property Intelligence Map</h2>
+    <p>Real OpenStreetMap tiles. AI-flagged properties overlaid with priority colour coding.
+       Click <b>Run AI Scan</b> to simulate satellite processing. Click any marker for details.</p>
+  </div>
+  <div class="map-container">
+    <div id="city-map"></div>
+    <div class="map-legend">
+      <div class="legend-title">Change Status</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#C00000"></div>High Priority</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#E8A000"></div>Medium</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#007A4E"></div>Low / Cleared</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#007EB5"></div>Under Review</div>
+    </div>
+  </div>
+  <div class="map-controls">
+    <button class="map-btn btn-orange" onclick="triggerScan()">▶ Run AI Scan</button>
+    <button class="map-btn btn-navy" onclick="resetMap()">Reset View</button>
+    <button class="map-btn btn-navy" onclick="toggleHeatmap()">Toggle Heat View</button>
+  </div>
+  <div class="scan-log" id="scanLog"></div>
+</section>
+
+<!-- ════ STEP 2: CHANGE DETECTION ════ -->
+<section id="s-detect">
+  <div class="section-header">
+    <div class="section-tag">STEP 2 — CHANGE DETECTION</div>
+    <h2>Satellite Before vs After Comparison</h2>
+    <p>Drag the slider ◀▶ to compare simulated aerial views between Jan 2025 and Jan 2026.
+       Red overlays mark AI-detected unauthorized changes near MGM University.</p>
+  </div>
+  <div class="comparison-wrapper">
+    <div class="comp-outer" id="compOuter">
+      <div class="sat-before"></div>
+      <div class="sat-after" id="compAfter">
+        <span class="img-label label-after">Jan 2026</span>
+      </div>
+      <div class="comp-divider" id="compDiv">
+        <div class="comp-handle">&#8596;</div>
+      </div>
+      <span class="img-label label-before">Jan 2025</span>
+    </div>
+    <div class="change-tags">
+      <div class="change-tag tag-red">🔴 Unauthorized Floor Addition — CSM-N6-0082</div>
+      <div class="change-tag tag-red">🔴 Footprint Expansion — CSM-N6-0082</div>
+      <div class="change-tag tag-orange">🟠 New Construction Detected — CSM-N6-0095</div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ STEP 3: AI PIPELINE ════ -->
+<section id="s-pipe">
+  <div class="section-header">
+    <div class="section-tag">STEP 3 — AI PROCESSING</div>
+    <h2>5-Module AI Pipeline</h2>
+    <p>Every Sentinel-2 acquisition runs through 5 sequential AI modules.
+       Property <b>CSM-N6-0082</b> classified in 2.3 seconds from raw pixels to priority score.</p>
+  </div>
+
+  <div class="pipeline" id="pipelineDiv">
+    <div class="pipe-mod" id="pm0">
+      <div class="mod-num">M1</div>
+      <div class="mod-icon">🛰</div>
+      <div class="mod-name">ChangeDetect</div>
+      <div class="mod-algo">iMAD + BIT Transformer</div>
+      <div class="mod-desc">Pixel-level comparison across all 500K parcels between baseline and new acquisition. Filters noise, cloud shadow.</div>
+      <div class="mod-out">↳ 1,247 parcels flagged</div>
+      <div class="conf-bar"><div class="conf-fill" id="cf0"></div></div>
+      <div class="conf-label">96% confidence</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-mod active-mod" id="pm1">
+      <div class="mod-num">M2</div>
+      <div class="mod-icon">🏠</div>
+      <div class="mod-name">FootprintAI</div>
+      <div class="mod-algo">U-Net Segmentation</div>
+      <div class="mod-desc">Extracts exact building footprint from imagery. Compares against registered GIS boundary. Detects expansions.</div>
+      <div class="mod-out">↳ +28 sqm expansion found</div>
+      <div class="conf-bar"><div class="conf-fill" id="cf1"></div></div>
+      <div class="conf-label">91% confidence</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-mod" id="pm2">
+      <div class="mod-num">M3</div>
+      <div class="mod-icon">📐</div>
+      <div class="mod-name">HeightEstimator</div>
+      <div class="mod-algo">Shadow Analysis + DSM</div>
+      <div class="mod-desc">Estimates floor count from shadow length and Digital Surface Model. Detects unauthorized additional floors.</div>
+      <div class="mod-out">↳ +1 floor detected (~3.2m)</div>
+      <div class="conf-bar"><div class="conf-fill" id="cf2"></div></div>
+      <div class="conf-label">84% confidence</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-mod" id="pm3">
+      <div class="mod-num">M4</div>
+      <div class="mod-icon">🏪</div>
+      <div class="mod-name">UseClassifier</div>
+      <div class="mod-algo">XGBoost + Spectral</div>
+      <div class="mod-desc">Classifies land use type (residential / commercial / mixed) using multispectral bands and temporal activity patterns.</div>
+      <div class="mod-out">↳ Residential → Mixed-use</div>
+      <div class="conf-bar"><div class="conf-fill" id="cf3"></div></div>
+      <div class="conf-label">88% confidence</div>
+    </div>
+    <div class="pipe-arrow">→</div>
+
+    <div class="pipe-mod" id="pm4">
+      <div class="mod-num">M5</div>
+      <div class="mod-icon">⭐</div>
+      <div class="mod-name">PriorityScore</div>
+      <div class="mod-algo">Weighted Ensemble</div>
+      <div class="mod-desc">Computes final investigation priority score from change severity, estimated tax gap, and officer queue load.</div>
+      <div class="mod-out">↳ Priority Score: 87/100</div>
+      <div class="conf-bar"><div class="conf-fill" id="cf4"></div></div>
+      <div class="conf-label">Score: 87/100</div>
+    </div>
+  </div>
+
+  <div class="pipe-status">
+    <span class="pipe-status-txt" id="pipeStatusTxt">Ready — click Run AI Scan to simulate</span>
+    <div class="pipe-prog-wrap"><div class="pipe-prog" id="pipeProg"></div></div>
+    <span class="pipe-result" id="pipeResult">—</span>
+  </div>
+</section>
+
+<!-- ════ STEP 4: DASHBOARD ════ -->
+<section id="s-dash">
+  <div class="section-header">
+    <div class="section-tag">STEP 4 — OFFICER DASHBOARD</div>
+    <h2>Priority Investigation Queue</h2>
+    <p>Officers see only AI-ranked alerts — not 500K records.
+       Click any row to see full AI analysis. Filter by priority level.</p>
+  </div>
+  <div class="dash-wrap">
+    <div class="dash-topbar">
+      <h3>Showing flagged properties — N-6 Zone, CSM &nbsp;|&nbsp; Scan: 15 Jan 2026</h3>
+      <div class="chips">
+        <span class="chip chip-all active-chip" onclick="filterTable('ALL')">All</span>
+        <span class="chip chip-high" onclick="filterTable('HIGH')">🔴 High</span>
+        <span class="chip chip-med" onclick="filterTable('MEDIUM')">🟡 Medium</span>
+        <span class="chip chip-low" onclick="filterTable('LOW')">🟢 Low</span>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Property ID</th><th>Location</th><th>Change Type</th>
+          <th>Detected</th><th>Priority</th><th>AI Score</th>
+          <th>Est. Tax Gap</th><th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="propTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ════ STEP 5: AUTO-NOTICE ════ -->
+<section id="s-notice">
+  <div class="section-header">
+    <div class="section-tag">STEP 5 — AUTONOTICE ENGINE</div>
+    <h2>AI-Generated Demand Notice</h2>
+    <p>After field verification, CityLens auto-drafts a legally formatted municipal demand notice
+       — reducing admin time from 3–5 days to under 60 seconds.</p>
+  </div>
+  <div class="notice-wrap">
+    <div class="notice-doc">
+      <div class="notice-hdr">
+        <div class="govt-name">CHHATRAPATI SAMBHAJINAGAR MUNICIPAL CORPORATION (CSMC)</div>
+        <div class="dept-name">Department of Property Tax &amp; Assessment — AI-Assisted Notice System | CityLens v1.0</div>
+      </div>
+      <div class="notice-title">Demand Notice — Unauthorized Construction / Property Tax Reassessment</div>
+      <div class="notice-ref">
+        <span>Notice No.: CSMC/PT/N6/2026/0082</span>
+        <span>Date: 15 February 2026</span>
+      </div>
+      <div class="notice-body">
+        <p>To,<br>
+        <strong>The Owner / Occupier</strong><br>
+        Property ID: CSM-N6-0082<br>
+        Survey No. 142/A, N-6 Sector, CIDCO,<br>
+        Near MGM University (Rukmani Auditorium),<br>
+        Chhatrapati Sambhajinagar, Maharashtra 431003</p>
+
+        <p>Subject: <strong>Detection of Unauthorized Construction &amp; Change in Property Use — Immediate Action Required</strong></p>
+
+        <p>This notice is issued pursuant to the Maharashtra Municipal Corporations Act, 1949,
+        Section 268 &amp; 269, regarding property at the above address. The CSMC Satellite-Assisted
+        Property Intelligence System (CityLens) has detected the following unauthorized changes
+        during routine satellite monitoring of the N-6 Zone:</p>
+
+        <table class="nd-table">
+          <tr><td>Property ID</td><td>CSM-N6-0082</td></tr>
+          <tr><td>Detection Date</td><td>15 January 2026 (Sentinel-2 Satellite Acquisition)</td></tr>
+          <tr><td>AI Change Type</td><td>Unauthorized Floor Addition + Use Conversion (Residential → Mixed)</td></tr>
+          <tr><td>Additional Area Detected</td><td>28 sq.m. (3rd floor, unauthorized)</td></tr>
+          <tr><td>Previous Assessment</td><td>Residential, 2 floors, 120 sq.m. — ₹8,400 / year</td></tr>
+          <tr><td>Revised Assessment (Est.)</td><td>Mixed-use, 3 floors, 148 sq.m. — ₹14,200 / year</td></tr>
+          <tr><td>Estimated Arrears (2 Years)</td><td>₹11,600</td></tr>
+          <tr><td>AI Confidence Score</td><td>87/100 (High Priority)</td></tr>
+          <tr><td>Field Verification</td><td>✅ Confirmed by Officer J. Rathod on 02 Feb 2026</td></tr>
+        </table>
+
+        <p>You are hereby directed to <strong>appear before the Property Tax Assessment Office within
+        15 days</strong> of receipt of this notice and submit documentary evidence of approvals, if any,
+        for the above construction / change. Failure to comply will result in assessment of enhanced
+        property tax with penalty under applicable provisions of the Maharashtra Municipal
+        Corporations Act, 1949.</p>
+      </div>
+      <div class="notice-sig">
+        <div class="sig-block">
+          <div class="sig-line"></div>
+          <div class="sig-name">G. Shreekant, IAS</div>
+          <div class="sig-title">Municipal Commissioner, CSMC</div>
+        </div>
+      </div>
+      <div class="ai-stamp">✓ Auto-generated by CityLens AI &nbsp;|&nbsp; Field Verified &nbsp;|&nbsp; Notice ID: CL-2026-00082</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <strong>CityLens</strong> — AI-Powered Property Intelligence &nbsp;|&nbsp;
+  DiscoverLabs.AI Hackathon — Track 5: Governance &amp; Smart Administration &nbsp;|&nbsp;
+  SolvaTech / Siliconplanes &nbsp;|&nbsp; Demo v1.0 &nbsp;|&nbsp;
+  <em>Real map: OpenStreetMap © contributors</em>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="propModal">
+  <div class="modal">
+    <button class="mclose" onclick="closeModal()">✕</button>
+    <h3 id="m-name">Property</h3>
+    <div class="modal-id" id="m-id"></div>
+    <div class="mgrid">
+      <div class="mfield"><label>Location</label><span id="m-loc">—</span></div>
+      <div class="mfield"><label>Change Type</label><span id="m-type">—</span></div>
+      <div class="mfield"><label>Detected On</label><span id="m-date">—</span></div>
+      <div class="mfield"><label>Priority</label><span id="m-pri">—</span></div>
+      <div class="mfield"><label>Owner (Demo)</label><span id="m-own">—</span></div>
+      <div class="mfield"><label>Est. Tax Gap / Year</label><span id="m-tax">—</span></div>
+    </div>
+    <div class="ai-scores-box">
+      <h4>AI Module Confidence Scores</h4>
+      <div id="m-scores"></div>
+    </div>
+    <div class="tl">
+      <h4>Event Timeline</h4>
+      <div id="m-tl"></div>
+    </div>
+    <button class="gen-btn" onclick="alert('Notice generated! See AutoNotice section for sample.')">
+      📄 Generate Demand Notice
+    </button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ══════════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════════
+const CENTER = [19.8762, 75.3433]; // Chhatrapati Sambhajinagar
+
+const PROPS = [
+  { id:'CSM-N6-0082', name:'Near MGM Rukmani Auditorium, N-6',
+    lat:19.8770, lng:75.3445, priority:'HIGH', score:87, tax:'₹5,800',
+    type:'Floor Addition + Use Change', detected:'15 Jan 2026', owner:'Ramesh Patil',
+    poly:[[19.8768,75.3443],[19.8772,75.3443],[19.8772,75.3448],[19.8768,75.3448]],
+    scores:[{l:'ChangeDetect',v:96},{l:'FootprintAI',v:91},{l:'HeightEstimator',v:84},{l:'UseClassifier',v:88}],
+    tl:[{d:'Jan 2024',e:'Baseline: 2 floors, Residential, 120 sqm'},
+        {d:'Aug 2025',e:'Shadow analysis: possible 3rd floor under construction'},
+        {d:'15 Jan 2026',e:'CityLens flags HIGH (Score 87) — floor addition + use change'},
+        {d:'02 Feb 2026',e:'Field Officer J. Rathod confirms unauthorized 3rd floor'},
+        {d:'15 Feb 2026',e:'Demand notice auto-generated by CityLens'}] },
+
+  { id:'CSM-N6-0095', name:'MGM University East Boundary, N-6',
+    lat:19.8755, lng:75.3452, priority:'HIGH', score:82, tax:'₹12,000',
+    type:'New Construction on Vacant Land', detected:'15 Jan 2026', owner:'Sunita Deshmukh',
+    poly:[[19.8753,75.3450],[19.8757,75.3450],[19.8757,75.3456],[19.8753,75.3456]],
+    scores:[{l:'ChangeDetect',v:98},{l:'FootprintAI',v:94},{l:'HeightEstimator',v:79},{l:'UseClassifier',v:85}],
+    tl:[{d:'Dec 2023',e:'Parcel recorded as vacant agricultural land'},
+        {d:'Mar 2025',e:'Construction activity detected via change detection'},
+        {d:'15 Jan 2026',e:'Complete 2-floor structure detected — HIGH priority'},
+        {d:'Pending',e:'Field verification assigned to Officer K. Jadhav'}] },
+
+  { id:'CSM-N6-0031', name:'N-6 Main Road, Plot 31',
+    lat:19.8778, lng:75.3438, priority:'HIGH', score:79, tax:'₹8,400',
+    type:'Unauthorized Hoarding on Residential', detected:'10 Jan 2026', owner:'Kapil Enterprises',
+    poly:[[19.8776,75.3436],[19.8780,75.3436],[19.8780,75.3441],[19.8776,75.3441]],
+    scores:[{l:'ChangeDetect',v:93},{l:'FootprintAI',v:89},{l:'HeightEstimator',v:74},{l:'UseClassifier',v:91}],
+    tl:[{d:'Dec 2024',e:'Large hoarding detected on registered residential plot'},
+        {d:'10 Jan 2026',e:'CityLens flags — HIGH — commercial use on residential land'},
+        {d:'Pending',e:'Field verification pending — assigned to Officer M. Shinde'}] },
+
+  { id:'CSM-N6-0113', name:'N-6 Residential Block C',
+    lat:19.8773, lng:75.3424, priority:'MEDIUM', score:65, tax:'₹3,200',
+    type:'Footprint Expansion', detected:'20 Jan 2026', owner:'Anil Khedkar',
+    poly:[[19.8771,75.3422],[19.8775,75.3422],[19.8775,75.3427],[19.8771,75.3427]],
+    scores:[{l:'ChangeDetect',v:88},{l:'FootprintAI',v:76},{l:'HeightEstimator',v:61},{l:'UseClassifier',v:72}],
+    tl:[{d:'Jun 2022',e:'Baseline: 80 sqm ground floor — registered'},
+        {d:'Nov 2025',e:'Footprint expansion detected: +18 sqm side addition'},
+        {d:'20 Jan 2026',e:'Flagged MEDIUM priority (Score 65) — pending assignment'}] },
+
+  { id:'CSM-N6-0147', name:'N-6 Commercial Strip, Plot 147',
+    lat:19.8750, lng:75.3428, priority:'MEDIUM', score:58, tax:'₹4,100',
+    type:'Residential → Commercial Use Conversion', detected:'20 Jan 2026', owner:'Priya Waghmare',
+    poly:[[19.8748,75.3426],[19.8752,75.3426],[19.8752,75.3431],[19.8748,75.3431]],
+    scores:[{l:'ChangeDetect',v:72},{l:'FootprintAI',v:68},{l:'HeightEstimator',v:55},{l:'UseClassifier',v:80}],
+    tl:[{d:'Mar 2021',e:'Registered: Residential — 1 floor'},
+        {d:'Jan 2026',e:'Spectral analysis: commercial signage & heat signature detected'},
+        {d:'20 Jan 2026',e:'Flagged MEDIUM — use conversion verification needed'}] },
+
+  { id:'CSM-N6-0044', name:'CIDCO Sector 7, Plot 44',
+    lat:19.8756, lng:75.3417, priority:'MEDIUM', score:61, tax:'₹2,700',
+    type:'Rear Footprint Expansion', detected:'20 Jan 2026', owner:'Meena Bhosale',
+    poly:[[19.8754,75.3415],[19.8758,75.3415],[19.8758,75.3420],[19.8754,75.3420]],
+    scores:[{l:'ChangeDetect',v:81},{l:'FootprintAI',v:73},{l:'HeightEstimator',v:59},{l:'UseClassifier',v:64}],
+    tl:[{d:'Apr 2022',e:'Registered: 95 sqm'},
+        {d:'Sep 2025',e:'+12 sqm rear extension detected'},
+        {d:'20 Jan 2026',e:'Flagged MEDIUM — officer assignment pending'}] },
+
+  { id:'CSM-N6-0071', name:'N-6 Commercial Area, Plot 71',
+    lat:19.8748, lng:75.3450, priority:'MEDIUM', score:63, tax:'₹3,800',
+    type:'Property Subdivision (Unauthorized)', detected:'22 Jan 2026', owner:'Ravi Thorat',
+    poly:[[19.8746,75.3448],[19.8750,75.3448],[19.8750,75.3454],[19.8746,75.3454]],
+    scores:[{l:'ChangeDetect',v:79},{l:'FootprintAI',v:85},{l:'HeightEstimator',v:52},{l:'UseClassifier',v:70}],
+    tl:[{d:'Jul 2023',e:'Single property: 200 sqm commercial'},
+        {d:'Oct 2025',e:'GIS footprint shows 3 distinct internal units'},
+        {d:'22 Jan 2026',e:'Flagged MEDIUM — subdivision without approval'}] },
+
+  { id:'CSM-N6-0062', name:'Near Rukmani Auditorium, Plot 62',
+    lat:19.8765, lng:75.3460, priority:'LOW', score:31, tax:'₹900',
+    type:'Minor Canopy Extension', detected:'25 Jan 2026', owner:'Vinod Salunkhe',
+    poly:[[19.8763,75.3458],[19.8767,75.3458],[19.8767,75.3463],[19.8763,75.3463]],
+    scores:[{l:'ChangeDetect',v:55},{l:'FootprintAI',v:42},{l:'HeightEstimator',v:38},{l:'UseClassifier',v:50}],
+    tl:[{d:'Jan 2026',e:'Minor canopy extension detected (+4 sqm)'},
+        {d:'25 Jan 2026',e:'Flagged LOW priority — routine queue'}] },
+
+  { id:'CSM-N6-0058', name:'N-6 East Wing, Plot 58',
+    lat:19.8742, lng:75.3440, priority:'REVIEW', score:45, tax:'₹2,100',
+    type:'Possible Floor Addition (Low Confidence)', detected:'28 Jan 2026', owner:'Sanjay Kulkarni',
+    poly:[[19.8740,75.3438],[19.8744,75.3438],[19.8744,75.3443],[19.8740,75.3443]],
+    scores:[{l:'ChangeDetect',v:67},{l:'FootprintAI',v:58},{l:'HeightEstimator',v:71},{l:'UseClassifier',v:55}],
+    tl:[{d:'Feb 2025',e:'Possible floor addition — low AI confidence (45)'},
+        {d:'28 Jan 2026',e:'Sent to review queue — needs clearer satellite pass'}] },
+
+  { id:'CSM-N6-0019', name:'N-6 Plot 19 — Cleared',
+    lat:19.8760, lng:75.3462, priority:'CLEARED', score:12, tax:'₹0',
+    type:'False Positive — Permit Found', detected:'05 Jan 2026', owner:'Lakshmi Trust',
+    poly:[[19.8758,75.3460],[19.8762,75.3460],[19.8762,75.3465],[19.8758,75.3465]],
+    scores:[{l:'ChangeDetect',v:32},{l:'FootprintAI',v:21},{l:'HeightEstimator',v:18},{l:'UseClassifier',v:25}],
+    tl:[{d:'05 Jan 2026',e:'Low-confidence change signal detected'},
+        {d:'12 Jan 2026',e:'Field review: valid construction permit found — CLEARED'}] }
+];
+
+const PRIORITY_COLOR = {HIGH:'#C00000',MEDIUM:'#E8A000',LOW:'#007A4E',REVIEW:'#007EB5',CLEARED:'#778899'};
+const PRIORITY_BADGE = {HIGH:'b-high',MEDIUM:'b-med',LOW:'b-low',REVIEW:'b-done',CLEARED:'b-done'};
+
+// ══════════════════════════════════════════════════════════════
+// MAP SETUP
+// ══════════════════════════════════════════════════════════════
+const map = L.map('city-map',{zoomControl:true}).setView(CENTER,15);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'© <a href="https://openstreetmap.org">OpenStreetMap</a> contributors | Demo: CityLens',
+  maxZoom:19
+}).addTo(map);
+
+// Pulse animation CSS injection
+const pulseStyle = document.createElement('style');
+pulseStyle.textContent=`@keyframes pls{0%{box-shadow:0 0 0 0 rgba(192,0,0,.65),0 2px 8px rgba(0,0,0,.4)}70%{box-shadow:0 0 0 14px rgba(192,0,0,0),0 2px 8px rgba(0,0,0,.4)}100%{box-shadow:0 0 0 0 rgba(192,0,0,0),0 2px 8px rgba(0,0,0,.4)}}`;
+document.head.appendChild(pulseStyle);
+
+function makeIcon(color,size=16,pulse=false){
+  return L.divIcon({className:'',iconSize:[size,size],iconAnchor:[size/2,size/2],
+    html:`<div style="width:${size}px;height:${size}px;background:${color};border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.4);${pulse?'animation:pls 1.8s infinite':''}"></div>`});
+}
+
+// MGM Landmark
+const mgmIcon = L.divIcon({className:'',iconSize:[180,46],iconAnchor:[90,46],
+  html:`<div style="background:#1B335C;color:#fff;padding:6px 10px;border-radius:6px;font-size:11px;font-weight:800;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.4);text-align:center;line-height:1.4">📍 MGM University<br>Rukmani Auditorium (Demo Area)</div>`});
+L.marker([19.8762,75.3433],{icon:mgmIcon}).addTo(map);
+
+const markerObjects = [], polyObjects = [];
+
+PROPS.forEach(p=>{
+  const color = PRIORITY_COLOR[p.priority];
+  const pulse = p.priority==='HIGH';
+  const m = L.marker([p.lat,p.lng],{icon:makeIcon(color,16,pulse)}).addTo(map);
+  m.bindPopup(`
+    <div style="font-family:Segoe UI,Arial,sans-serif;min-width:220px;padding:2px">
+      <div style="font-weight:800;font-size:.9rem;color:#0D1B2A;margin-bottom:3px">${p.id}</div>
+      <div style="font-size:.75rem;color:#556572;margin-bottom:6px">${p.name}</div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:7px">
+        <span style="background:${color}22;color:${color};padding:2px 9px;border-radius:10px;font-size:.68rem;font-weight:800">${p.priority}</span>
+        <span style="font-size:.75rem;color:#1B335C;font-weight:700">Score: ${p.score}/100</span>
+      </div>
+      <div style="font-size:.76rem;color:#333;margin-bottom:2px"><b>Type:</b> ${p.type}</div>
+      <div style="font-size:.76rem;color:#333;margin-bottom:2px"><b>Detected:</b> ${p.detected}</div>
+      <div style="font-size:.76rem;color:#333;margin-bottom:8px"><b>Est. Tax Gap:</b> ${p.tax}/yr</div>
+      <button onclick="openModal('${p.id}')" style="width:100%;padding:7px;background:#007EB5;color:#fff;border:none;border-radius:5px;font-size:.75rem;font-weight:700;cursor:pointer">📋 View Full Analysis</button>
+    </div>`);
+  markerObjects.push({marker:m, prop:p});
+
+  const poly = L.polygon(p.poly,{color,fillColor:color,fillOpacity:.25,weight:2.5}).addTo(map);
+  poly.on('click',()=>openModal(p.id));
+  polyObjects.push(poly);
+});
+
+// ── SCAN ──
+let scanRunning=false;
+function triggerScan(){
+  if(scanRunning)return;
+  scanRunning=true;
+  const btn=document.querySelector('.btn-orange');
+  btn.textContent='⏳ Scanning...'; btn.disabled=true;
+
+  const log=document.getElementById('scanLog');
+  log.style.display='block'; log.innerHTML='';
+  const logLines=[
+    {cls:'log-info',txt:'[CityLens] Fetching Sentinel-2 tile S2A_MSIL2A_20260115T053641...'},
+    {cls:'log-info',txt:'[CityLens] Cloud mask applied — 94% clear pixels in AOI'},
+    {cls:'log-info',txt:'[M1 ChangeDetect] Running iMAD transform on 500,247 parcels...'},
+    {cls:'log-warn',txt:'[M1 ChangeDetect] 1,247 parcels exceed change threshold → forwarding'},
+    {cls:'log-info',txt:'[M2 FootprintAI] U-Net segmentation on 1,247 parcels...'},
+    {cls:'log-warn',txt:'[M2 FootprintAI] CSM-N6-0082: +28 sqm expansion detected'},
+    {cls:'log-warn',txt:'[M2 FootprintAI] CSM-N6-0095: new footprint on previously vacant parcel'},
+    {cls:'log-info',txt:'[M3 HeightEstimator] Shadow analysis running...'},
+    {cls:'log-warn',txt:'[M3 HeightEstimator] CSM-N6-0082: floor count 2→3 detected'},
+    {cls:'log-info',txt:'[M4 UseClassifier] XGBoost spectral classification...'},
+    {cls:'log-warn',txt:'[M4 UseClassifier] CSM-N6-0082: Residential→Mixed-use (conf 88%)'},
+    {cls:'log-info',txt:'[M5 PriorityScore] Computing weighted ensemble scores...'},
+    {cls:'log-ok', txt:'[M5 PriorityScore] CSM-N6-0082 → SCORE 87/100 → HIGH PRIORITY'},
+    {cls:'log-ok', txt:'[CityLens] Scan complete. 1,247 flagged | 3 HIGH | 4 MEDIUM | Dashboard updated.'},
+  ];
+
+  // Animate pipeline bar
+  const prog=document.getElementById('pipeProg');
+  const ptxt=document.getElementById('pipeStatusTxt');
+  const pres=document.getElementById('pipeResult');
+  ptxt.textContent='Processing CSM-N6-0082...'; pres.textContent='—';
+  prog.style.width='0%';
+
+  // Animate confidence fills
+  ['cf0','cf1','cf2','cf3','cf4'].forEach(id=>{document.getElementById(id).style.width='0%'});
+
+  const fills=[{id:'cf0',w:'96%'},{id:'cf1',w:'91%'},{id:'cf2',w:'84%'},{id:'cf3',w:'88%'},{id:'cf4',w:'87%'}];
+
+  logLines.forEach((l,i)=>{
+    setTimeout(()=>{
+      const d=document.createElement('div');
+      d.className='log-line '+l.cls; d.textContent=l.txt;
+      log.appendChild(d); log.scrollTop=log.scrollHeight;
+
+      // Animate markers
+      if(i<markerObjects.length){
+        const mp=markerObjects[i];
+        const c=PRIORITY_COLOR[mp.prop.priority];
+        mp.marker.setIcon(makeIcon('#ffffff',22));
+        setTimeout(()=>mp.marker.setIcon(makeIcon(c,16,mp.prop.priority==='HIGH')),350);
+      }
+
+      // Progress bar
+      prog.style.width=((i+1)/logLines.length*100)+'%';
+
+      // Trigger confidence fills at right time
+      if(i>=5){
+        const fi=i-5; if(fi<fills.length){
+          setTimeout(()=>{document.getElementById(fills[fi].id).style.width=fills[fi].w},200);
+        }
+      }
+
+      if(i===logLines.length-1){
+        ptxt.textContent='CSM-N6-0082 classified in 2.3s';
+        pres.textContent='✓ HIGH PRIORITY';
+        btn.textContent='▶ Run AI Scan'; btn.disabled=false;
+        scanRunning=false;
+      }
+    },i*420);
+  });
+}
+
+let heatVisible=false;
+function toggleHeatmap(){
+  heatVisible=!heatVisible;
+  polyObjects.forEach((poly,i)=>{
+    const p=PROPS[i];
+    const color=PRIORITY_COLOR[p.priority];
+    poly.setStyle({fillOpacity:heatVisible?.55:.25,weight:heatVisible?3:2.5});
+  });
+}
+
+function resetMap(){map.setView(CENTER,15);}
+
+// ── BEFORE/AFTER SLIDER ──
+const outer=document.getElementById('compOuter');
+const compAfter=document.getElementById('compAfter');
+const compDiv=document.getElementById('compDiv');
+let dragging=false;
+function setSlider(x){
+  const r=outer.getBoundingClientRect();
+  let p=Math.max(.04,Math.min(.96,(x-r.left)/r.width));
+  compAfter.style.clipPath=`inset(0 ${((1-p)*100).toFixed(1)}% 0 0)`;
+  compDiv.style.left=(p*100).toFixed(1)+'%';
+}
+outer.addEventListener('mousedown',e=>{dragging=true;setSlider(e.clientX)});
+document.addEventListener('mousemove',e=>{if(dragging)setSlider(e.clientX)});
+document.addEventListener('mouseup',()=>dragging=false);
+outer.addEventListener('touchstart',e=>{dragging=true;setSlider(e.touches[0].clientX)},{passive:true});
+document.addEventListener('touchmove',e=>{if(dragging)setSlider(e.touches[0].clientX)},{passive:true});
+document.addEventListener('touchend',()=>dragging=false);
+
+// ── TABLE ──
+let currentFilter='ALL';
+function filterTable(f){
+  currentFilter=f;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.remove('active-chip'));
+  event.target.classList.add('active-chip');
+  renderTable();
+}
+
+function renderTable(){
+  const tbody=document.getElementById('propTable');
+  tbody.innerHTML='';
+  const filtered=currentFilter==='ALL'?PROPS:PROPS.filter(p=>p.priority===currentFilter);
+  filtered.forEach(p=>{
+    const color=PRIORITY_COLOR[p.priority];
+    const tr=document.createElement('tr');
+    tr.onclick=()=>openModal(p.id);
+    tr.innerHTML=`
+      <td><strong>${p.id}</strong></td>
+      <td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</td>
+      <td><span class="badge b-type">${p.type}</span></td>
+      <td>${p.detected}</td>
+      <td><span class="badge ${PRIORITY_BADGE[p.priority]}">${p.priority}</span></td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <div style="flex:1;background:#DDE4EC;border-radius:3px;height:6px">
+            <div style="width:${p.score}%;height:100%;background:${p.score>70?'#C00000':p.score>50?'#E8A000':'#007A4E'};border-radius:3px"></div>
+          </div>
+          <span style="font-weight:800;font-size:.79rem;color:${color}">${p.score}</span>
+        </div>
+      </td>
+      <td style="font-weight:700;color:${p.tax==='₹0'?'#007A4E':'#C00000'}">${p.tax}/yr</td>
+      <td><button class="vbtn" onclick="event.stopPropagation();openModal('${p.id}')">Details</button></td>`;
+    tbody.appendChild(tr);
+  });
+}
+renderTable();
+
+// ── MODAL ──
+function openModal(id){
+  const p=PROPS.find(x=>x.id===id); if(!p)return;
+  const color=PRIORITY_COLOR[p.priority];
+  document.getElementById('m-name').textContent=p.name;
+  document.getElementById('m-id').textContent=p.id+' — '+p.type;
+  document.getElementById('m-loc').textContent=p.name;
+  document.getElementById('m-type').textContent=p.type;
+  document.getElementById('m-date').textContent=p.detected;
+  document.getElementById('m-pri').innerHTML=`<span class="badge ${PRIORITY_BADGE[p.priority]}">${p.priority}</span>`;
+  document.getElementById('m-own').textContent=p.owner;
+  document.getElementById('m-tax').textContent=p.tax+'/yr';
+
+  document.getElementById('m-scores').innerHTML=p.scores.map(s=>`
+    <div class="score-row">
+      <div class="score-lbl">${s.l}</div>
+      <div class="score-bar"><div class="score-fill" style="width:${s.v}%;background:${s.v>80?'#007A4E':s.v>60?'#E8A000':'#C00000'}"></div></div>
+      <div class="score-pct">${s.v}%</div>
+    </div>`).join('');
+
+  document.getElementById('m-tl').innerHTML=p.tl.map((t,i)=>`
+    <div class="tl-item">
+      <div class="tl-dots">
+        <div class="tl-dot" style="background:${i===p.tl.length-1?'#F06A1A':'#007EB5'}"></div>
+        ${i<p.tl.length-1?'<div class="tl-line"></div>':''}
+      </div>
+      <div style="padding-bottom:.7rem">
+        <div class="tl-date">${t.d}</div>
+        <div class="tl-event">${t.e}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('propModal').classList.add('open');
+  map.flyTo([p.lat,p.lng],17,{duration:1});
+}
+
+function closeModal(){document.getElementById('propModal').classList.remove('open');}
+document.getElementById('propModal').addEventListener('click',e=>{
+  if(e.target===document.getElementById('propModal'))closeModal();
+});
+
+// Auto-animate confidence bars on pipeline load
+setTimeout(()=>{
+  ['cf0','cf1','cf2','cf3','cf4'].forEach((id,i)=>{
+    const widths=['96%','91%','84%','88%','87%'];
+    setTimeout(()=>{document.getElementById(id).style.width=widths[i]},i*200+500);
+  });
+},600);
+</script>
+</body>
+</html>
