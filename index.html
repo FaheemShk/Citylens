@@ -335,6 +335,20 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
   display:flex;align-items:center;justify-content:center;gap:.4rem;transition:all .2s;margin-top:.9rem}
 .genbtn:hover{background:#D45A0A;transform:translateY(-1px)}
 
+/* ── LANGUAGE SWITCHER ── */
+.llang{display:flex;justify-content:center;gap:5px;margin-bottom:1rem}
+.llang .lang-btn{border:2px solid var(--border);background:#fff;color:var(--gray);
+  padding:4px 12px;border-radius:20px;font-size:.72rem;font-weight:700;cursor:pointer;
+  transition:all .2s;font-family:inherit}
+.llang .lang-btn.act{border-color:var(--orange);color:var(--orange);background:rgba(240,106,26,.07)}
+.llang .lang-btn:hover:not(.act){border-color:var(--sky);color:var(--sky)}
+.tblang{display:flex;gap:3px;background:var(--light);padding:3px;border-radius:6px}
+.tblang .lang-btn{border:none;background:transparent;color:var(--gray);
+  padding:3px 9px;border-radius:4px;font-size:.68rem;font-weight:700;
+  cursor:pointer;transition:all .2s;font-family:inherit}
+.tblang .lang-btn.act{background:var(--navy);color:#fff}
+.tblang .lang-btn:hover:not(.act){background:var(--border)}
+
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pls{0%{box-shadow:0 0 0 0 rgba(192,0,0,.65),0 2px 8px rgba(0,0,0,.4)}
@@ -347,23 +361,28 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 <!-- ═══ LOGIN ═══ -->
 <div id="loginScreen">
   <div class="lcard">
+    <div class="llang" id="llang">
+      <button class="lang-btn act" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" onclick="setLang('hi')">हि</button>
+      <button class="lang-btn" onclick="setLang('mr')">म</button>
+    </div>
     <div class="llogo">
       <div class="llogo-txt">City<span>Lens</span></div>
-      <div class="llogo-sub">AI Property Intelligence Platform</div>
+      <div class="llogo-sub" data-i18n="l.sub">AI Property Intelligence Platform</div>
     </div>
     <div class="ldept">
       <span class="material-icons" style="font-size:.95rem;color:var(--sky)">account_balance</span>
-      CSMC — Chhatrapati Sambhajinagar Municipal Corporation
+      <span data-i18n="l.dept">CSMC — Chhatrapati Sambhajinagar Municipal Corporation</span>
     </div>
-    <div class="lerr" id="lerr">Invalid credentials. Please try again.</div>
+    <div class="lerr" id="lerr" data-i18n="l.err">Invalid credentials. Please try again.</div>
     <div class="lform">
-      <label>Email Address</label>
+      <label data-i18n="l.email">Email Address</label>
       <input type="email" id="lem" placeholder="officer@csmc.gov.in" value="officer@csmc.gov.in">
-      <label>Password</label>
+      <label data-i18n="l.pw">Password</label>
       <input type="password" id="lpw" placeholder="••••••••" value="csmc@2026">
-      <button class="lbtn" onclick="doLogin()">Sign In to CityLens</button>
+      <button class="lbtn" onclick="doLogin()"><span data-i18n="l.btn">Sign In to CityLens</span></button>
     </div>
-    <div class="lhint">Demo: <code>officer@csmc.gov.in</code> / <code>csmc@2026</code></div>
+    <div class="lhint"><span data-i18n="l.hint">Demo:</span> <code>officer@csmc.gov.in</code> / <code>csmc@2026</code></div>
   </div>
 </div>
 
@@ -375,25 +394,25 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
   <aside id="sb">
     <div class="sb-logo">
       <div class="sb-logo-txt">City<span>Lens</span><span class="sb-badge">DEMO</span></div>
-      <div class="sb-sub">Property Intelligence System</div>
+      <div class="sb-sub" data-i18n="sb.sub">Property Intelligence System</div>
     </div>
     <nav class="sb-nav">
-      <div class="sb-sec">Main</div>
-      <div class="ni act" onclick="nav('overview',this)"><span class="material-icons">dashboard</span>Overview</div>
-      <div class="ni" onclick="nav('phase0',this)"><span class="material-icons">storage</span>Phase 0: Base Layer<span class="ni-cnt">!</span></div>
-      <div class="sb-sec" style="margin-top:.4rem">Operations</div>
-      <div class="ni" onclick="nav('revmap',this)"><span class="material-icons">map</span>RevMap<span class="ni-cnt" id="nBadge">3</span></div>
-      <div class="ni" onclick="nav('detect',this)"><span class="material-icons">satellite_alt</span>Change Detection</div>
-      <div class="ni" onclick="nav('pipeline',this)"><span class="material-icons">account_tree</span>AI Pipeline</div>
-      <div class="ni" onclick="nav('queue',this)"><span class="material-icons">list_alt</span>Priority Queue<span class="ni-cnt">10</span></div>
-      <div class="ni" onclick="nav('notice',this)"><span class="material-icons">description</span>AutoNotice</div>
+      <div class="sb-sec" data-i18n="sb.sec1">Main</div>
+      <div class="ni act" onclick="nav('overview',this)"><span class="material-icons">dashboard</span><span data-i18n="sb.overview">Overview</span></div>
+      <div class="ni" onclick="nav('phase0',this)"><span class="material-icons">storage</span><span data-i18n="sb.phase0">Phase 0: Base Layer</span><span class="ni-cnt">!</span></div>
+      <div class="sb-sec" style="margin-top:.4rem" data-i18n="sb.sec2">Operations</div>
+      <div class="ni" onclick="nav('revmap',this)"><span class="material-icons">map</span><span data-i18n="sb.revmap">RevMap</span><span class="ni-cnt" id="nBadge">3</span></div>
+      <div class="ni" onclick="nav('detect',this)"><span class="material-icons">satellite_alt</span><span data-i18n="sb.detect">Change Detection</span></div>
+      <div class="ni" onclick="nav('pipeline',this)"><span class="material-icons">account_tree</span><span data-i18n="sb.pipeline">AI Pipeline</span></div>
+      <div class="ni" onclick="nav('queue',this)"><span class="material-icons">list_alt</span><span data-i18n="sb.queue">Priority Queue</span><span class="ni-cnt">10</span></div>
+      <div class="ni" onclick="nav('notice',this)"><span class="material-icons">description</span><span data-i18n="sb.notice">AutoNotice</span></div>
     </nav>
     <div class="sb-foot">
       <div class="ucard">
         <div class="uavatar">JR</div>
-        <div><div class="uname">J. Rathod</div><div class="urole">Revenue Officer — N-6 Zone</div></div>
+        <div><div class="uname">J. Rathod</div><div class="urole" data-i18n="sb.role">Revenue Officer — N-6 Zone</div></div>
       </div>
-      <button class="lout-btn" onclick="doLogout()"><span class="material-icons" style="font-size:.85rem">logout</span>Sign Out</button>
+      <button class="lout-btn" onclick="doLogout()"><span class="material-icons" style="font-size:.85rem">logout</span><span data-i18n="sb.signout">Sign Out</span></button>
     </div>
   </aside>
 
@@ -402,10 +421,15 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
     <div id="tb">
       <div>
         <div class="tb-title" id="tbTitle">Dashboard Overview</div>
-        <div class="tb-sub">CityLens — N-6 Zone, Chhatrapati Sambhajinagar</div>
+        <div class="tb-sub" data-i18n="tb.sub">CityLens — N-6 Zone, Chhatrapati Sambhajinagar</div>
       </div>
       <div style="display:flex;align-items:center;gap:.8rem;margin-left:auto">
-        <div class="tb-chip"><span class="material-icons">fiber_manual_record</span>Live · Last scan: 15 Jan 2026</div>
+        <div class="tb-chip"><span class="material-icons">fiber_manual_record</span><span data-i18n="tb.chip">Live · Last scan: 15 Jan 2026</span></div>
+        <div class="tblang" id="tblang">
+          <button class="lang-btn act" onclick="setLang('en')">EN</button>
+          <button class="lang-btn" onclick="setLang('hi')">हि</button>
+          <button class="lang-btn" onclick="setLang('mr')">म</button>
+        </div>
         <button class="nb"><span class="material-icons">notifications</span><div class="ndot"></div></button>
         <div class="tb-user"><span class="material-icons">person</span>J. Rathod</div>
       </div>
@@ -415,33 +439,33 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 
       <!-- ════ OVERVIEW ════ -->
       <div class="pg act" id="pg-overview">
-        <div class="pghdr"><h1>Dashboard Overview</h1><p>Chhatrapati Sambhajinagar — N-6 Zone — Satellite Scan: 15 January 2026</p></div>
+        <div class="pghdr"><h1 data-i18n="ov.h1">Dashboard Overview</h1><p data-i18n="ov.p">Chhatrapati Sambhajinagar — N-6 Zone — Satellite Scan: 15 January 2026</p></div>
         <div class="sgrid">
           <div class="sc"><div class="sico"><span class="material-icons">location_city</span></div>
-            <div><div class="snum">500K+</div><div class="slbl">Parcels Monitored</div><div class="schg up">▲ 100% city coverage</div></div></div>
+            <div><div class="snum">500K+</div><div class="slbl" data-i18n="ov.slbl1">Parcels Monitored</div><div class="schg up" data-i18n="ov.schg1">▲ 100% city coverage</div></div></div>
           <div class="sc red"><div class="sico"><span class="material-icons">warning</span></div>
-            <div><div class="snum">1,247</div><div class="slbl">Flagged (Latest Scan)</div><div class="schg wrn">3 HIGH priority</div></div></div>
+            <div><div class="snum">1,247</div><div class="slbl" data-i18n="ov.slbl2">Flagged (Latest Scan)</div><div class="schg wrn" data-i18n="ov.schg2">3 HIGH priority</div></div></div>
           <div class="sc ora"><div class="sico"><span class="material-icons">pending_actions</span></div>
-            <div><div class="snum">84</div><div class="slbl">Pending Verification</div><div class="schg wrn">12 assigned to you</div></div></div>
+            <div><div class="snum">84</div><div class="slbl" data-i18n="ov.slbl3">Pending Verification</div><div class="schg wrn" data-i18n="ov.schg3">12 assigned to you</div></div></div>
           <div class="sc grn"><div class="sico"><span class="material-icons">description</span></div>
-            <div><div class="snum">312</div><div class="slbl">Notices (2026)</div><div class="schg up">▲ ₹42L initiated</div></div></div>
+            <div><div class="snum">312</div><div class="slbl" data-i18n="ov.slbl4">Notices (2026)</div><div class="schg up" data-i18n="ov.schg4">▲ ₹42L initiated</div></div></div>
         </div>
         <div class="p0banner">
-          <h3>Phase 0 — Ground Truth Base Layer</h3>
-          <p>Building the verified property master database. Recovering revenue before satellite AI cycles begin.</p>
+          <h3 data-i18n="ov.p0h">Phase 0 — Ground Truth Base Layer</h3>
+          <p data-i18n="ov.p0p">Building the verified property master database. Recovering revenue before satellite AI cycles begin.</p>
           <div class="p0st">
-            <div><div class="p0sn">68.5%</div><div class="p0sl">Enrollment Complete</div></div>
-            <div><div class="p0sn">42,847</div><div class="p0sl">Discrepancies Found</div></div>
-            <div><div class="p0sn">₹28.4 Cr</div><div class="p0sl">Revenue Identified</div></div>
+            <div><div class="p0sn">68.5%</div><div class="p0sl" data-i18n="ov.p0s1">Enrollment Complete</div></div>
+            <div><div class="p0sn">42,847</div><div class="p0sl" data-i18n="ov.p0s2">Discrepancies Found</div></div>
+            <div><div class="p0sn">₹28.4 Cr</div><div class="p0sl" data-i18n="ov.p0s3">Revenue Identified</div></div>
           </div>
           <div class="prwrap">
-            <div class="prlbl" style="color:rgba(255,255,255,.6)"><span>Properties enrolled</span><strong style="color:#fff">342,500 / 500,000</strong></div>
+            <div class="prlbl" style="color:rgba(255,255,255,.6)"><span data-i18n="ov.enrolled">Properties enrolled</span><strong style="color:#fff">342,500 / 500,000</strong></div>
             <div class="prbar"><div class="prfill" style="width:68.5%"></div></div>
           </div>
         </div>
         <div class="g2">
           <div class="card">
-            <div class="chdr"><div class="ctit">Recent AI Alerts</div><span class="ctag">Latest Scan</span></div>
+            <div class="chdr"><div class="ctit" data-i18n="ov.alerts">Recent AI Alerts</div><span class="ctag" data-i18n="ov.latest">Latest Scan</span></div>
             <ul class="alist">
               <li class="ai"><div class="adot" style="background:var(--red)"></div><div>
                 <div class="atxt"><strong>CSM-N6-0082</strong> — Floor addition + use conversion</div>
@@ -461,20 +485,20 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
             </ul>
           </div>
           <div class="card">
-            <div class="chdr"><div class="ctit">Monthly Performance</div><span class="ctag">2025–2026</span></div>
-            <div style="font-size:.72rem;color:var(--gray);margin-bottom:.9rem">Metrics from latest scan cycle</div>
-            <div class="prwrap"><div class="prlbl"><span>Phase 0 Enrollment</span><strong>68.5%</strong></div><div class="prbar"><div class="prfill" style="width:68.5%"></div></div></div>
-            <div class="prwrap"><div class="prlbl"><span>Field Verification Rate</span><strong>73%</strong></div><div class="prbar"><div class="prfill ora" style="width:73%"></div></div></div>
-            <div class="prwrap"><div class="prlbl"><span>AI Detection Accuracy</span><strong>94.2%</strong></div><div class="prbar"><div class="prfill" style="width:94.2%"></div></div></div>
-            <div class="prwrap"><div class="prlbl"><span>Notice Conversion</span><strong>89%</strong></div><div class="prbar"><div class="prfill" style="width:89%"></div></div></div>
+            <div class="chdr"><div class="ctit" data-i18n="ov.monthly">Monthly Performance</div><span class="ctag">2025–2026</span></div>
+            <div style="font-size:.72rem;color:var(--gray);margin-bottom:.9rem" data-i18n="ov.scanmetrics">Metrics from latest scan cycle</div>
+            <div class="prwrap"><div class="prlbl"><span data-i18n="ov.perf1">Phase 0 Enrollment</span><strong>68.5%</strong></div><div class="prbar"><div class="prfill" style="width:68.5%"></div></div></div>
+            <div class="prwrap"><div class="prlbl"><span data-i18n="ov.perf2">Field Verification Rate</span><strong>73%</strong></div><div class="prbar"><div class="prfill ora" style="width:73%"></div></div></div>
+            <div class="prwrap"><div class="prlbl"><span data-i18n="ov.perf3">AI Detection Accuracy</span><strong>94.2%</strong></div><div class="prbar"><div class="prfill" style="width:94.2%"></div></div></div>
+            <div class="prwrap"><div class="prlbl"><span data-i18n="ov.perf4">Notice Conversion</span><strong>89%</strong></div><div class="prbar"><div class="prfill" style="width:89%"></div></div></div>
             <div style="margin-top:1.2rem;display:grid;grid-template-columns:1fr 1fr;gap:.7rem">
               <div style="background:var(--light);border-radius:6px;padding:.8rem;text-align:center">
                 <div style="font-size:1.3rem;font-weight:800;color:var(--orange)">2.3s</div>
-                <div style="font-size:.66rem;color:var(--gray)">Avg. per property</div>
+                <div style="font-size:.66rem;color:var(--gray)" data-i18n="ov.avgprop">Avg. per property</div>
               </div>
               <div style="background:var(--light);border-radius:6px;padding:.8rem;text-align:center">
                 <div style="font-size:1.3rem;font-weight:800;color:var(--green)">31h</div>
-                <div style="font-size:.66rem;color:var(--gray)">Full city scan</div>
+                <div style="font-size:.66rem;color:var(--gray)" data-i18n="ov.fullscan">Full city scan</div>
               </div>
             </div>
           </div>
@@ -483,16 +507,16 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 
       <!-- ════ PHASE 0 ════ -->
       <div class="pg" id="pg-phase0">
-        <div class="pghdr"><h1>Phase 0 — Ground Truth Base Layer</h1><p>AI-assisted property enrollment and tax reconciliation. Revenue recovery before satellite monitoring begins.</p></div>
+        <div class="pghdr"><h1 data-i18n="p0.h1">Phase 0 — Ground Truth Base Layer</h1><p data-i18n="p0.p">AI-assisted property enrollment and tax reconciliation. Revenue recovery before satellite monitoring begins.</p></div>
         <div class="sgrid">
-          <div class="sc"><div class="sico"><span class="material-icons">home_work</span></div><div><div class="snum">342,500</div><div class="slbl">Properties Enrolled</div><div class="schg up">68.5% complete</div></div></div>
-          <div class="sc ora"><div class="sico"><span class="material-icons">find_in_page</span></div><div><div class="snum">42,847</div><div class="slbl">Discrepancies Found</div><div class="schg wrn">12.5% of enrolled</div></div></div>
-          <div class="sc red"><div class="sico"><span class="material-icons">domain_disabled</span></div><div><div class="snum">8,420</div><div class="slbl">Unregistered</div><div class="schg wrn">No tax record found</div></div></div>
-          <div class="sc grn"><div class="sico"><span class="material-icons">account_balance_wallet</span></div><div><div class="snum">₹28.4 Cr</div><div class="slbl">Revenue Identified</div><div class="schg up">Before AI starts</div></div></div>
+          <div class="sc"><div class="sico"><span class="material-icons">home_work</span></div><div><div class="snum">342,500</div><div class="slbl" data-i18n="p0.slbl1">Properties Enrolled</div><div class="schg up" data-i18n="p0.schg1">68.5% complete</div></div></div>
+          <div class="sc ora"><div class="sico"><span class="material-icons">find_in_page</span></div><div><div class="snum">42,847</div><div class="slbl" data-i18n="p0.slbl2">Discrepancies Found</div><div class="schg wrn" data-i18n="p0.schg2">12.5% of enrolled</div></div></div>
+          <div class="sc red"><div class="sico"><span class="material-icons">domain_disabled</span></div><div><div class="snum">8,420</div><div class="slbl" data-i18n="p0.slbl3">Unregistered</div><div class="schg wrn" data-i18n="p0.schg3">No tax record found</div></div></div>
+          <div class="sc grn"><div class="sico"><span class="material-icons">account_balance_wallet</span></div><div><div class="snum">₹28.4 Cr</div><div class="slbl" data-i18n="p0.slbl4">Revenue Identified</div><div class="schg up" data-i18n="p0.schg4">Before AI starts</div></div></div>
         </div>
         <div class="g2">
           <div class="card">
-            <div class="chdr"><div class="ctit">Enrollment by Zone</div><span class="ctag">Phase 0</span></div>
+            <div class="chdr"><div class="ctit" data-i18n="p0.enrollzone">Enrollment by Zone</div><span class="ctag" data-i18n="p0.phase0tag">Phase 0</span></div>
             <div class="zbars">
               <div class="zbi"><div class="zn">N-1</div><div class="zbar"><div class="zfill" style="width:92%"></div></div><div class="zpct">92%</div></div>
               <div class="zbi"><div class="zn">N-2</div><div class="zbar"><div class="zfill" style="width:88%"></div></div><div class="zpct">88%</div></div>
@@ -505,10 +529,10 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
             </div>
           </div>
           <div class="card">
-            <div class="chdr"><div class="ctit">Discrepancy Breakdown</div><span class="ctag">Revenue Impact</span></div>
+            <div class="chdr"><div class="ctit" data-i18n="p0.discbreak">Discrepancy Breakdown</div><span class="ctag" data-i18n="p0.revimpact">Revenue Impact</span></div>
             <div class="twrap">
               <table>
-                <thead><tr><th>Category</th><th>Count</th><th>Est. Annual Gap</th></tr></thead>
+                <thead><tr><th data-i18n="p0.thcat">Category</th><th data-i18n="p0.thcount">Count</th><th data-i18n="p0.thgap">Est. Annual Gap</th></tr></thead>
                 <tbody>
                   <tr><td>Unregistered properties</td><td style="font-weight:800;color:var(--red)">8,420</td><td style="font-weight:800;color:var(--green)">₹8.4 Cr</td></tr>
                   <tr><td>Under-assessed area</td><td style="font-weight:800;color:var(--red)">18,650</td><td style="font-weight:800;color:var(--green)">₹11.2 Cr</td></tr>
@@ -520,13 +544,13 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
               </table>
             </div>
             <div class="insight">
-              <div class="insight-title">Phase 0 Key Insight</div>
+              <div class="insight-title" data-i18n="p0.insight">Phase 0 Key Insight</div>
               <div class="insight-body">₹28.4 Cr recovery from base layer reconciliation alone — before satellite AI begins. MCGM Mumbai, Pune PMC & GHMC Hyderabad achieved 20–40% additional annual tax revenue from similar GIS enrollment drives.</div>
             </div>
           </div>
         </div>
         <div class="card">
-          <div class="chdr"><div class="ctit">Phase Transition Pipeline</div><span class="ctag">Status</span></div>
+          <div class="chdr"><div class="ctit" data-i18n="p0.phasetrans">Phase Transition Pipeline</div><span class="ctag" data-i18n="p0.status">Status</span></div>
           <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
             <div style="flex:1;min-width:170px;background:rgba(0,126,181,.08);border:2px solid rgba(0,126,181,.3);border-radius:8px;padding:1rem;text-align:center">
               <div style="font-size:1.4rem">🗃</div>
@@ -551,17 +575,17 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 
       <!-- ════ REVMAP ════ -->
       <div class="pg" id="pg-revmap">
-        <div class="pghdr"><h1>RevMap — Live Property Intelligence</h1><p>Click <strong>Run AI Scan</strong> to simulate a satellite pass and reveal AI-flagged properties. Click any marker for full analysis.</p></div>
+        <div class="pghdr"><h1 data-i18n="rm.h1">RevMap — Live Property Intelligence</h1><p data-i18n="rm.p">Click <strong>Run AI Scan</strong> to simulate a satellite pass and reveal AI-flagged properties. Click any marker for full analysis.</p></div>
         <div class="maptb">
-          <button class="btn btn-p" id="scanBtn" onclick="triggerScan()"><span class="material-icons">satellite_alt</span>Run AI Scan</button>
-          <button class="btn btn-s btn-sm" onclick="resetRevMap()"><span class="material-icons">refresh</span>Reset</button>
-          <button class="btn btn-o btn-sm" onclick="toggleHeat()"><span class="material-icons">thermostat</span>Heat View</button>
+          <button class="btn btn-p" id="scanBtn" onclick="triggerScan()"><span class="material-icons">satellite_alt</span><span data-i18n="rm.scan">Run AI Scan</span></button>
+          <button class="btn btn-s btn-sm" onclick="resetRevMap()"><span class="material-icons">refresh</span><span data-i18n="rm.reset">Reset</span></button>
+          <button class="btn btn-o btn-sm" onclick="toggleHeat()"><span class="material-icons">thermostat</span><span data-i18n="rm.heat">Heat View</span></button>
           <div style="margin-left:auto;font-size:.75rem;color:var(--gray)">📍 N-6 Zone, Chhatrapati Sambhajinagar · OpenStreetMap</div>
         </div>
         <div class="mapwrap">
           <div id="revMap"></div>
           <div class="mleg">
-            <div class="mleg-t">Change Status</div>
+            <div class="mleg-t" data-i18n="rm.legttl">Change Status</div>
             <div class="mli"><div class="mldot" style="background:#C00000"></div>High Priority</div>
             <div class="mli"><div class="mldot" style="background:#E8A000"></div>Medium</div>
             <div class="mli"><div class="mldot" style="background:#007A4E"></div>Low / Cleared</div>
@@ -573,14 +597,14 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 
       <!-- ════ CHANGE DETECTION ════ -->
       <div class="pg" id="pg-detect">
-        <div class="pghdr"><h1>Satellite Change Detection</h1><p>Real satellite imagery of Chhatrapati Sambhajinagar. OSM building footprints loaded live. Drag slider to compare baseline vs. AI-detected changes.</p></div>
+        <div class="pghdr"><h1 data-i18n="det.h1">Satellite Change Detection</h1><p data-i18n="det.p">Real satellite imagery of Chhatrapati Sambhajinagar. OSM building footprints loaded live. Drag slider to compare baseline vs. AI-detected changes.</p></div>
         <div class="dethdr">
           <div class="detinfo">
             <strong>Area:</strong> MGM University, Rukmani Auditorium, N-6, CSM &nbsp;|&nbsp;
             <strong>Imagery:</strong> Esri World Satellite (real) + OSM Buildings (live) &nbsp;|&nbsp;
             <strong>Baseline:</strong> Jan 2024 &nbsp;|&nbsp; <strong>Current:</strong> Jan 2026
           </div>
-          <button class="btn btn-p btn-sm" id="osmBtn" onclick="loadOSMBuildings()"><span class="material-icons">layers</span>Load OSM Buildings</button>
+          <button class="btn btn-p btn-sm" id="osmBtn" onclick="loadOSMBuildings()"><span class="material-icons">layers</span><span data-i18n="det.osm">Load OSM Buildings</span></button>
         </div>
         <div class="couter" id="compOuter">
           <div id="mapBefore"></div>
@@ -590,20 +614,20 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
           <div class="mlabel ml-r">📅 Jan 2026 — AI Detection</div>
         </div>
         <div class="cleg">
-          <div class="clegi"><div class="clegb" style="background:rgba(0,126,181,.45);border:2px solid #007EB5"></div>Registered Buildings (OSM)</div>
-          <div class="clegi"><div class="clegb" style="background:rgba(192,0,0,.4);border:2px solid #C00000"></div>Floor Addition / Expansion Detected</div>
-          <div class="clegi"><div class="clegb" style="background:rgba(240,106,26,.4);border:2px solid #F06A1A"></div>New Construction Detected</div>
+          <div class="clegi"><div class="clegb" style="background:rgba(0,126,181,.45);border:2px solid #007EB5"></div><span data-i18n="det.leg1">Registered Buildings (OSM)</span></div>
+          <div class="clegi"><div class="clegb" style="background:rgba(192,0,0,.4);border:2px solid #C00000"></div><span data-i18n="det.leg2">Floor Addition / Expansion Detected</span></div>
+          <div class="clegi"><div class="clegb" style="background:rgba(240,106,26,.4);border:2px solid #F06A1A"></div><span data-i18n="det.leg3">New Construction Detected</span></div>
         </div>
         <div class="osm-note"><strong>Note:</strong> Satellite imagery © Esri, USGS, NGA, NASA — real imagery of CSM. Building outlines from OpenStreetMap via Overpass API (live). Red/orange polygons = simulated AI change detections for demo purposes.</div>
       </div>
 
       <!-- ════ PIPELINE ════ -->
       <div class="pg" id="pg-pipeline">
-        <div class="pghdr"><h1>AI Processing Pipeline</h1><p>5-module sequential engine. Every satellite acquisition processes all 500K parcels in 24–48 hours.</p></div>
+        <div class="pghdr"><h1 data-i18n="pip.h1">AI Processing Pipeline</h1><p data-i18n="pip.p">5-module sequential engine. Every satellite acquisition processes all 500K parcels in 24–48 hours.</p></div>
         <div class="card" style="margin-bottom:1.2rem">
           <div class="chdr">
             <div class="ctit">Live Processing — CSM-N6-0082</div>
-            <button class="btn btn-p btn-sm" onclick="runPipeline()"><span class="material-icons">play_arrow</span>Run Pipeline</button>
+            <button class="btn btn-p btn-sm" onclick="runPipeline()"><span class="material-icons">play_arrow</span><span data-i18n="pip.run">Run Pipeline</span></button>
           </div>
           <div class="pflow">
             <div class="pmod" id="pm0"><div class="mnum">M1</div><div class="mico">🛰</div><div class="mnm">ChangeDetect</div><div class="malg">iMAD + BIT Transformer</div><div class="mdes">Pixel-level comparison across all 500K parcels. Filters cloud noise and seasonal variation.</div><div class="mout">↳ 1,247 flagged</div><div class="cbar"><div class="cfill" id="cf0"></div></div><div class="clbl">96% confidence</div></div>
@@ -617,51 +641,51 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
             <div class="pmod" id="pm4"><div class="mnum">M5</div><div class="mico">⭐</div><div class="mnm">PriorityScore</div><div class="malg">Weighted Ensemble</div><div class="mdes">Score = confidence × change_size × zone_value × age_penalty. Routes to auto-notice if > 70.</div><div class="mout">↳ Score: 87/100</div><div class="cbar"><div class="cfill" id="cf4"></div></div><div class="clbl">Score: 87/100</div></div>
           </div>
           <div class="pstat">
-            <span class="pstxt" id="pstxt">Ready — click Run Pipeline</span>
+            <span class="pstxt" id="pstxt" data-i18n="pip.ready">Ready — click Run Pipeline</span>
             <div class="ppwrap"><div class="pprog" id="pprog"></div></div>
             <span class="pres" id="pres">—</span>
           </div>
         </div>
         <div class="sgrid" style="margin-bottom:0">
-          <div class="sc"><div class="sico"><span class="material-icons">speed</span></div><div><div class="snum">2.3s</div><div class="slbl">Avg. per property</div></div></div>
-          <div class="sc grn"><div class="sico"><span class="material-icons">check_circle</span></div><div><div class="snum">94.2%</div><div class="slbl">Detection accuracy</div></div></div>
-          <div class="sc ora"><div class="sico"><span class="material-icons">timer</span></div><div><div class="snum">31h</div><div class="slbl">Full city scan</div></div></div>
+          <div class="sc"><div class="sico"><span class="material-icons">speed</span></div><div><div class="snum">2.3s</div><div class="slbl" data-i18n="pip.avgprop">Avg. per property</div></div></div>
+          <div class="sc grn"><div class="sico"><span class="material-icons">check_circle</span></div><div><div class="snum">94.2%</div><div class="slbl" data-i18n="pip.detacc">Detection accuracy</div></div></div>
+          <div class="sc ora"><div class="sico"><span class="material-icons">timer</span></div><div><div class="snum">31h</div><div class="slbl" data-i18n="pip.fullscan">Full city scan</div></div></div>
         </div>
       </div>
 
       <!-- ════ QUEUE ════ -->
       <div class="pg" id="pg-queue">
-        <div class="pghdr"><h1>Priority Investigation Queue</h1><p>AI-ranked alerts. Officers see only what needs attention — not 500K records.</p></div>
+        <div class="pghdr"><h1 data-i18n="q.h1">Priority Investigation Queue</h1><p data-i18n="q.p">AI-ranked alerts. Officers see only what needs attention — not 500K records.</p></div>
         <div class="card">
           <div class="qtb">
             <div class="chips">
-              <span class="chip chip-all" onclick="filterQ('ALL',this)">All</span>
+              <span class="chip chip-all" onclick="filterQ('ALL',this)" data-i18n="q.all">All</span>
               <span class="chip chip-hi" onclick="filterQ('HIGH',this)">🔴 High</span>
               <span class="chip chip-me" onclick="filterQ('MEDIUM',this)">🟡 Medium</span>
               <span class="chip chip-lo" onclick="filterQ('LOW',this)">🟢 Low</span>
             </div>
-            <input class="srch" type="text" placeholder="Search ID or location…" oninput="searchQ(this.value)">
+            <input class="srch" type="text" placeholder="Search ID or location…" data-i18n-ph="q.search" oninput="searchQ(this.value)">
           </div>
           <div class="twrap"><table><thead><tr>
-            <th onclick="sortQ('id')">Property ID ↕</th><th>Location</th><th>Change Type</th>
-            <th onclick="sortQ('detected')">Detected ↕</th><th>Priority</th>
-            <th onclick="sortQ('score')">AI Score ↕</th><th>Tax Gap</th><th>Action</th>
+            <th onclick="sortQ('id')" data-i18n="q.thid">Property ID ↕</th><th data-i18n="q.thloc">Location</th><th data-i18n="q.thtype">Change Type</th>
+            <th onclick="sortQ('detected')" data-i18n="q.thdet">Detected ↕</th><th data-i18n="q.thpri">Priority</th>
+            <th onclick="sortQ('score')" data-i18n="q.thscore">AI Score ↕</th><th data-i18n="q.thtax">Tax Gap</th><th data-i18n="q.thact">Action</th>
           </tr></thead><tbody id="qtable"></tbody></table></div>
         </div>
       </div>
 
       <!-- ════ NOTICE ════ -->
       <div class="pg" id="pg-notice">
-        <div class="pghdr"><h1>AutoNotice Engine</h1><p>Auto-drafted demand notices on field confirmation. Select a property to preview.</p></div>
+        <div class="pghdr"><h1 data-i18n="not.h1">AutoNotice Engine</h1><p data-i18n="not.p">Auto-drafted demand notices on field confirmation. Select a property to preview.</p></div>
         <div class="nwrap">
           <div class="nsel">
-            <label>Select Property:</label>
+            <label data-i18n="not.lbl">Select Property:</label>
             <select id="nsel" onchange="renderNotice()">
               <option value="0">CSM-N6-0082 — Floor Addition + Use Change</option>
               <option value="1">CSM-N6-0095 — New Construction</option>
               <option value="2">CSM-N6-0031 — Unauthorized Hoarding</option>
             </select>
-            <button class="btn btn-p btn-sm" onclick="window.print()"><span class="material-icons">print</span>Print</button>
+            <button class="btn btn-p btn-sm" onclick="window.print()"><span class="material-icons">print</span><span data-i18n="not.print">Print</span></button>
           </div>
           <div class="ndoc" id="ndoc"></div>
         </div>
@@ -678,23 +702,266 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
     <button class="mxbtn" onclick="closeModal()">✕</button>
     <h3 id="m-nm"></h3><div class="mid" id="m-id"></div>
     <div class="mgrd">
-      <div class="mf"><label>Location</label><span id="m-loc"></span></div>
-      <div class="mf"><label>Change Type</label><span id="m-type"></span></div>
-      <div class="mf"><label>Detected On</label><span id="m-dt"></span></div>
-      <div class="mf"><label>Priority</label><span id="m-pri"></span></div>
-      <div class="mf"><label>Owner (Demo)</label><span id="m-own"></span></div>
-      <div class="mf"><label>Est. Tax Gap</label><span id="m-tax"></span></div>
+      <div class="mf"><label data-i18n="mod.loc">Location</label><span id="m-loc"></span></div>
+      <div class="mf"><label data-i18n="mod.type">Change Type</label><span id="m-type"></span></div>
+      <div class="mf"><label data-i18n="mod.dt">Detected On</label><span id="m-dt"></span></div>
+      <div class="mf"><label data-i18n="mod.pri">Priority</label><span id="m-pri"></span></div>
+      <div class="mf"><label data-i18n="mod.own">Owner (Demo)</label><span id="m-own"></span></div>
+      <div class="mf"><label data-i18n="mod.tax">Est. Tax Gap</label><span id="m-tax"></span></div>
     </div>
-    <div class="mscbox"><h4>AI Confidence Scores</h4><div id="m-sc"></div></div>
-    <div class="tl"><h4>Event Timeline</h4><div id="m-tl"></div></div>
+    <div class="mscbox"><h4 data-i18n="mod.scores">AI Confidence Scores</h4><div id="m-sc"></div></div>
+    <div class="tl"><h4 data-i18n="mod.tl">Event Timeline</h4><div id="m-tl"></div></div>
     <button class="genbtn" onclick="nav('notice',document.querySelectorAll('.ni')[6]);closeModal()">
-      <span class="material-icons">description</span>Generate Demand Notice
+      <span class="material-icons">description</span><span data-i18n="mod.genbtn">Generate Demand Notice</span>
     </button>
   </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
+// ══════════════════════════════════════════════════
+// MULTILINGUAL (EN / HI / MR)
+// ══════════════════════════════════════════════════
+const T={
+en:{
+  'l.sub':'AI Property Intelligence Platform',
+  'l.dept':'CSMC — Chhatrapati Sambhajinagar Municipal Corporation',
+  'l.err':'Invalid credentials. Please try again.',
+  'l.email':'Email Address','l.pw':'Password',
+  'l.btn':'Sign In to CityLens','l.hint':'Demo:',
+  'sb.sub':'Property Intelligence System',
+  'sb.sec1':'Main','sb.overview':'Overview',
+  'sb.phase0':'Phase 0: Base Layer','sb.sec2':'Operations',
+  'sb.revmap':'RevMap','sb.detect':'Change Detection',
+  'sb.pipeline':'AI Pipeline','sb.queue':'Priority Queue',
+  'sb.notice':'AutoNotice','sb.role':'Revenue Officer — N-6 Zone',
+  'sb.signout':'Sign Out',
+  'tb.chip':'Live · Last scan: 15 Jan 2026',
+  'tb.sub':'CityLens — N-6 Zone, Chhatrapati Sambhajinagar',
+  'page.overview':'Dashboard Overview','page.phase0':'Phase 0 — Base Layer',
+  'page.revmap':'RevMap — Live Intelligence','page.detect':'Change Detection',
+  'page.pipeline':'AI Pipeline','page.queue':'Priority Queue','page.notice':'AutoNotice',
+  'ov.h1':'Dashboard Overview',
+  'ov.p':'Chhatrapati Sambhajinagar — N-6 Zone — Satellite Scan: 15 January 2026',
+  'ov.slbl1':'Parcels Monitored','ov.schg1':'▲ 100% city coverage',
+  'ov.slbl2':'Flagged (Latest Scan)','ov.schg2':'3 HIGH priority',
+  'ov.slbl3':'Pending Verification','ov.schg3':'12 assigned to you',
+  'ov.slbl4':'Notices (2026)','ov.schg4':'▲ ₹42L initiated',
+  'ov.p0h':'Phase 0 — Ground Truth Base Layer',
+  'ov.p0p':'Building the verified property master database. Recovering revenue before satellite AI cycles begin.',
+  'ov.p0s1':'Enrollment Complete','ov.p0s2':'Discrepancies Found','ov.p0s3':'Revenue Identified',
+  'ov.enrolled':'Properties enrolled','ov.alerts':'Recent AI Alerts','ov.latest':'Latest Scan',
+  'ov.monthly':'Monthly Performance','ov.scanmetrics':'Metrics from latest scan cycle',
+  'ov.perf1':'Phase 0 Enrollment','ov.perf2':'Field Verification Rate',
+  'ov.perf3':'AI Detection Accuracy','ov.perf4':'Notice Conversion',
+  'ov.avgprop':'Avg. per property','ov.fullscan':'Full city scan',
+  'p0.h1':'Phase 0 — Ground Truth Base Layer',
+  'p0.p':'AI-assisted property enrollment and tax reconciliation. Revenue recovery before satellite monitoring begins.',
+  'p0.slbl1':'Properties Enrolled','p0.schg1':'68.5% complete',
+  'p0.slbl2':'Discrepancies Found','p0.schg2':'12.5% of enrolled',
+  'p0.slbl3':'Unregistered','p0.schg3':'No tax record found',
+  'p0.slbl4':'Revenue Identified','p0.schg4':'Before AI starts',
+  'p0.enrollzone':'Enrollment by Zone','p0.phase0tag':'Phase 0',
+  'p0.discbreak':'Discrepancy Breakdown','p0.revimpact':'Revenue Impact',
+  'p0.thcat':'Category','p0.thcount':'Count','p0.thgap':'Est. Annual Gap',
+  'p0.insight':'Phase 0 Key Insight',
+  'p0.phasetrans':'Phase Transition Pipeline','p0.status':'Status',
+  'rm.h1':'RevMap — Live Property Intelligence',
+  'rm.p':'Click Run AI Scan to simulate a satellite pass and reveal AI-flagged properties. Click any marker for full analysis.',
+  'rm.scan':'Run AI Scan','rm.reset':'Reset','rm.heat':'Heat View','rm.legttl':'Change Status',
+  'det.h1':'Satellite Change Detection',
+  'det.p':'Real satellite imagery of Chhatrapati Sambhajinagar. OSM building footprints loaded live. Drag slider to compare baseline vs. AI-detected changes.',
+  'det.osm':'Load OSM Buildings',
+  'det.leg1':'Registered Buildings (OSM)',
+  'det.leg2':'Floor Addition / Expansion Detected',
+  'det.leg3':'New Construction Detected',
+  'pip.h1':'AI Processing Pipeline',
+  'pip.p':'5-module sequential engine. Every satellite acquisition processes all 500K parcels in 24–48 hours.',
+  'pip.run':'Run Pipeline','pip.ready':'Ready — click Run Pipeline',
+  'pip.avgprop':'Avg. per property','pip.detacc':'Detection accuracy','pip.fullscan':'Full city scan',
+  'q.h1':'Priority Investigation Queue',
+  'q.p':'AI-ranked alerts. Officers see only what needs attention — not 500K records.',
+  'q.all':'All','q.search':'Search ID or location…',
+  'q.thid':'Property ID ↕','q.thloc':'Location','q.thtype':'Change Type',
+  'q.thdet':'Detected ↕','q.thpri':'Priority','q.thscore':'AI Score ↕',
+  'q.thtax':'Tax Gap','q.thact':'Action','q.details':'Details',
+  'not.h1':'AutoNotice Engine',
+  'not.p':'Auto-drafted demand notices on field confirmation. Select a property to preview.',
+  'not.lbl':'Select Property:','not.print':'Print',
+  'mod.loc':'Location','mod.type':'Change Type','mod.dt':'Detected On',
+  'mod.pri':'Priority','mod.own':'Owner (Demo)','mod.tax':'Est. Tax Gap',
+  'mod.scores':'AI Confidence Scores','mod.tl':'Event Timeline',
+  'mod.genbtn':'Generate Demand Notice'
+},
+hi:{
+  'l.sub':'AI संपत्ति बुद्धिमत्ता प्लेटफ़ॉर्म',
+  'l.dept':'सीएसएमसी — छत्रपति संभाजीनगर महानगरपालिका',
+  'l.err':'अमान्य प्रमाण-पत्र। कृपया पुनः प्रयास करें।',
+  'l.email':'ईमेल पता','l.pw':'पासवर्ड',
+  'l.btn':'CityLens में प्रवेश करें','l.hint':'डेमो:',
+  'sb.sub':'संपत्ति बुद्धिमत्ता प्रणाली',
+  'sb.sec1':'मुख्य','sb.overview':'सिंहावलोकन',
+  'sb.phase0':'चरण 0: आधार परत','sb.sec2':'कार्यसंचालन',
+  'sb.revmap':'रेवमैप','sb.detect':'परिवर्तन पहचान',
+  'sb.pipeline':'AI पाइपलाइन','sb.queue':'प्राथमिकता सूची',
+  'sb.notice':'स्वचालित नोटिस','sb.role':'राजस्व अधिकारी — N-6 क्षेत्र',
+  'sb.signout':'लॉग आउट',
+  'tb.chip':'लाइव · अंतिम स्कैन: 15 जन 2026',
+  'tb.sub':'CityLens — N-6 क्षेत्र, छत्रपति संभाजीनगर',
+  'page.overview':'डैशबोर्ड सिंहावलोकन','page.phase0':'चरण 0 — आधार परत',
+  'page.revmap':'रेवमैप — सीधी जानकारी','page.detect':'परिवर्तन पहचान',
+  'page.pipeline':'AI पाइपलाइन','page.queue':'प्राथमिकता सूची','page.notice':'स्वचालित नोटिस',
+  'ov.h1':'डैशबोर्ड सिंहावलोकन',
+  'ov.p':'छत्रपति संभाजीनगर — N-6 क्षेत्र — उपग्रह स्कैन: 15 जनवरी 2026',
+  'ov.slbl1':'निगरानी में भूखंड','ov.schg1':'▲ 100% शहर कवरेज',
+  'ov.slbl2':'चिह्नित (नवीनतम स्कैन)','ov.schg2':'3 उच्च प्राथमिकता',
+  'ov.slbl3':'सत्यापन लंबित','ov.schg3':'12 आपको सौंपे गए',
+  'ov.slbl4':'नोटिस (2026)','ov.schg4':'▲ ₹42 लाख आरंभित',
+  'ov.p0h':'चरण 0 — वास्तविक आधार परत',
+  'ov.p0p':'सत्यापित संपत्ति मास्टर डेटाबेस बनाना। AI चक्र शुरू होने से पहले राजस्व वसूली।',
+  'ov.p0s1':'नामांकन पूर्ण','ov.p0s2':'विसंगतियां मिलीं','ov.p0s3':'राजस्व पहचाना गया',
+  'ov.enrolled':'नामांकित संपत्तियां','ov.alerts':'हालिया AI अलर्ट','ov.latest':'नवीनतम स्कैन',
+  'ov.monthly':'मासिक प्रदर्शन','ov.scanmetrics':'नवीनतम स्कैन चक्र के मेट्रिक्स',
+  'ov.perf1':'चरण 0 नामांकन','ov.perf2':'फील्ड सत्यापन दर',
+  'ov.perf3':'AI पहचान सटीकता','ov.perf4':'नोटिस रूपांतरण',
+  'ov.avgprop':'प्रति संपत्ति औसत','ov.fullscan':'पूर्ण शहर स्कैन',
+  'p0.h1':'चरण 0 — वास्तविक आधार परत',
+  'p0.p':'AI-सहायता प्राप्त संपत्ति नामांकन और कर समाधान। उपग्रह निगरानी शुरू होने से पहले राजस्व वसूली।',
+  'p0.slbl1':'नामांकित संपत्तियां','p0.schg1':'68.5% पूर्ण',
+  'p0.slbl2':'विसंगतियां मिलीं','p0.schg2':'नामांकित का 12.5%',
+  'p0.slbl3':'अपंजीकृत','p0.schg3':'कोई कर रिकॉर्ड नहीं',
+  'p0.slbl4':'राजस्व पहचाना गया','p0.schg4':'AI शुरू होने से पहले',
+  'p0.enrollzone':'क्षेत्र अनुसार नामांकन','p0.phase0tag':'चरण 0',
+  'p0.discbreak':'विसंगति विवरण','p0.revimpact':'राजस्व प्रभाव',
+  'p0.thcat':'श्रेणी','p0.thcount':'संख्या','p0.thgap':'अनुमानित वार्षिक अंतर',
+  'p0.insight':'चरण 0 मुख्य अंतर्दृष्टि',
+  'p0.phasetrans':'चरण संक्रमण पाइपलाइन','p0.status':'स्थिति',
+  'rm.h1':'रेवमैप — सीधी संपत्ति जानकारी',
+  'rm.p':'AI स्कैन चलाएं बटन दबाएं। AI द्वारा चिह्नित संपत्तियां देखने के लिए किसी मार्कर पर क्लिक करें।',
+  'rm.scan':'AI स्कैन चलाएं','rm.reset':'रीसेट','rm.heat':'ताप दृश्य','rm.legttl':'परिवर्तन स्थिति',
+  'det.h1':'उपग्रह परिवर्तन पहचान',
+  'det.p':'छत्रपति संभाजीनगर की वास्तविक उपग्रह छवि। OSM भवन पदचिह्न लाइव लोड। बेसलाइन बनाम AI-पहचाने गए परिवर्तनों की तुलना करें।',
+  'det.osm':'OSM इमारतें लोड करें',
+  'det.leg1':'पंजीकृत इमारतें (OSM)',
+  'det.leg2':'मंजिल जोड़ / विस्तार पहचाना गया',
+  'det.leg3':'नई निर्माण पहचानी गई',
+  'pip.h1':'AI प्रसंस्करण पाइपलाइन',
+  'pip.p':'5-मॉड्यूल अनुक्रमिक इंजन। हर उपग्रह अधिग्रहण 24–48 घंटों में 500K भूखंड प्रसंस्कृत करता है।',
+  'pip.run':'पाइपलाइन चलाएं','pip.ready':'तैयार — पाइपलाइन चलाएं',
+  'pip.avgprop':'प्रति संपत्ति औसत','pip.detacc':'पहचान सटीकता','pip.fullscan':'पूर्ण शहर स्कैन',
+  'q.h1':'प्राथमिकता जांच सूची',
+  'q.p':'AI-क्रमित अलर्ट। अधिकारी केवल वही देखते हैं जिस पर ध्यान देना है।',
+  'q.all':'सभी','q.search':'ID या स्थान खोजें…',
+  'q.thid':'संपत्ति ID ↕','q.thloc':'स्थान','q.thtype':'परिवर्तन प्रकार',
+  'q.thdet':'पहचाना ↕','q.thpri':'प्राथमिकता','q.thscore':'AI अंक ↕',
+  'q.thtax':'कर अंतर','q.thact':'कार्रवाई','q.details':'विवरण',
+  'not.h1':'स्वचालित नोटिस इंजन',
+  'not.p':'फील्ड पुष्टि पर स्वचालित मांग नोटिस। पूर्वावलोकन के लिए संपत्ति चुनें।',
+  'not.lbl':'संपत्ति चुनें:','not.print':'प्रिंट',
+  'mod.loc':'स्थान','mod.type':'परिवर्तन प्रकार','mod.dt':'पहचान तारीख',
+  'mod.pri':'प्राथमिकता','mod.own':'मालिक (डेमो)','mod.tax':'अनुमानित कर अंतर',
+  'mod.scores':'AI विश्वास अंक','mod.tl':'घटनाक्रम',
+  'mod.genbtn':'मांग नोटिस बनाएं'
+},
+mr:{
+  'l.sub':'AI मालमत्ता बुद्धिमत्ता व्यासपीठ',
+  'l.dept':'मनपा — छत्रपती संभाजीनगर महानगरपालिका',
+  'l.err':'अवैध माहिती. कृपया पुन्हा प्रयत्न करा.',
+  'l.email':'ईमेल पत्ता','l.pw':'संकेतशब्द',
+  'l.btn':'CityLens मध्ये प्रवेश करा','l.hint':'डेमो:',
+  'sb.sub':'मालमत्ता बुद्धिमत्ता प्रणाली',
+  'sb.sec1':'मुख्य','sb.overview':'आढावा',
+  'sb.phase0':'टप्पा 0: आधार स्तर','sb.sec2':'कार्यसंचालन',
+  'sb.revmap':'रेवमॅप','sb.detect':'बदल शोध',
+  'sb.pipeline':'AI पाइपलाइन','sb.queue':'प्राधान्य रांग',
+  'sb.notice':'स्वयंचलित नोटिस','sb.role':'महसूल अधिकारी — N-6 विभाग',
+  'sb.signout':'बाहेर पडा',
+  'tb.chip':'थेट · शेवटचे स्कॅन: 15 जाने 2026',
+  'tb.sub':'CityLens — N-6 विभाग, छत्रपती संभाजीनगर',
+  'page.overview':'डॅशबोर्ड आढावा','page.phase0':'टप्पा 0 — आधार स्तर',
+  'page.revmap':'रेवमॅप — थेट माहिती','page.detect':'बदल शोध',
+  'page.pipeline':'AI पाइपलाइन','page.queue':'प्राधान्य रांग','page.notice':'स्वयंचलित नोटिस',
+  'ov.h1':'डॅशबोर्ड आढावा',
+  'ov.p':'छत्रपती संभाजीनगर — N-6 विभाग — उपग्रह स्कॅन: 15 जानेवारी 2026',
+  'ov.slbl1':'देखरेखीतील भूखंड','ov.schg1':'▲ 100% शहर व्याप्ती',
+  'ov.slbl2':'चिन्हांकित (अलीकडील स्कॅन)','ov.schg2':'3 उच्च प्राधान्य',
+  'ov.slbl3':'सत्यापन प्रलंबित','ov.schg3':'12 आपल्याला नियुक्त',
+  'ov.slbl4':'नोटिस (2026)','ov.schg4':'▲ ₹42 लाख सुरू केले',
+  'ov.p0h':'टप्पा 0 — वास्तव आधार स्तर',
+  'ov.p0p':'सत्यापित मालमत्ता मास्टर डेटाबेस तयार करणे. AI चक्र सुरू होण्यापूर्वी महसूल वसुली.',
+  'ov.p0s1':'नोंदणी पूर्ण','ov.p0s2':'तफावती आढळल्या','ov.p0s3':'महसूल ओळखला',
+  'ov.enrolled':'नोंदणीकृत मालमत्ता','ov.alerts':'अलीकडील AI सूचना','ov.latest':'अलीकडील स्कॅन',
+  'ov.monthly':'मासिक कामगिरी','ov.scanmetrics':'अलीकडील स्कॅन चक्राचे निकाल',
+  'ov.perf1':'टप्पा 0 नोंदणी','ov.perf2':'क्षेत्र सत्यापन दर',
+  'ov.perf3':'AI शोध अचूकता','ov.perf4':'नोटिस रूपांतरण',
+  'ov.avgprop':'प्रति मालमत्ता सरासरी','ov.fullscan':'संपूर्ण शहर स्कॅन',
+  'p0.h1':'टप्पा 0 — वास्तव आधार स्तर',
+  'p0.p':'AI-सहाय्यित मालमत्ता नोंदणी आणि कर जुळवणी. उपग्रह देखरेख सुरू होण्यापूर्वी महसूल वसुली.',
+  'p0.slbl1':'नोंदणीकृत मालमत्ता','p0.schg1':'68.5% पूर्ण',
+  'p0.slbl2':'तफावती आढळल्या','p0.schg2':'नोंदणीकृताचे 12.5%',
+  'p0.slbl3':'अनोंदणीकृत','p0.schg3':'कर नोंद नाही',
+  'p0.slbl4':'महसूल ओळखला','p0.schg4':'AI सुरू होण्यापूर्वी',
+  'p0.enrollzone':'विभागनिहाय नोंदणी','p0.phase0tag':'टप्पा 0',
+  'p0.discbreak':'तफावत तपशील','p0.revimpact':'महसूल परिणाम',
+  'p0.thcat':'श्रेणी','p0.thcount':'संख्या','p0.thgap':'अंदाजे वार्षिक तफावत',
+  'p0.insight':'टप्पा 0 मुख्य अंतर्दृष्टी',
+  'p0.phasetrans':'टप्पा संक्रमण पाइपलाइन','p0.status':'स्थिती',
+  'rm.h1':'रेवमॅप — थेट मालमत्ता माहिती',
+  'rm.p':'AI स्कॅन चालवा बटण दाबा. AI-चिन्हांकित मालमत्ता पाहण्यासाठी कोणत्याही मार्करवर क्लिक करा.',
+  'rm.scan':'AI स्कॅन चालवा','rm.reset':'रीसेट','rm.heat':'उष्णता दृश्य','rm.legttl':'बदल स्थिती',
+  'det.h1':'उपग्रह बदल शोध',
+  'det.p':'छत्रपती संभाजीनगरचे वास्तविक उपग्रह चित्र. OSM इमारत ठसे थेट लोड. बेसलाइन विरुद्ध AI-आढळलेल्या बदलांची तुलना करा.',
+  'det.osm':'OSM इमारती लोड करा',
+  'det.leg1':'नोंदणीकृत इमारती (OSM)',
+  'det.leg2':'मजला जोड / विस्तार आढळला',
+  'det.leg3':'नवीन बांधकाम आढळले',
+  'pip.h1':'AI प्रक्रिया पाइपलाइन',
+  'pip.p':'5-मॉड्युल अनुक्रमिक इंजन. प्रत्येक उपग्रह अधिग्रहण 24–48 तासांत 500K भूखंड प्रक्रिया करते.',
+  'pip.run':'पाइपलाइन चालवा','pip.ready':'तयार — पाइपलाइन चालवा',
+  'pip.avgprop':'प्रति मालमत्ता सरासरी','pip.detacc':'शोध अचूकता','pip.fullscan':'संपूर्ण शहर स्कॅन',
+  'q.h1':'प्राधान्य तपास रांग',
+  'q.p':'AI-क्रमित सूचना. अधिकाऱ्यांना फक्त लक्ष देणे आवश्यक असलेले दिसते.',
+  'q.all':'सर्व','q.search':'ID किंवा स्थान शोधा…',
+  'q.thid':'मालमत्ता ID ↕','q.thloc':'स्थान','q.thtype':'बदल प्रकार',
+  'q.thdet':'आढळले ↕','q.thpri':'प्राधान्य','q.thscore':'AI गुण ↕',
+  'q.thtax':'कर तफावत','q.thact':'कार्यवाही','q.details':'तपशील',
+  'not.h1':'स्वयंचलित नोटिस इंजन',
+  'not.p':'क्षेत्र पुष्टीनंतर स्वयंचलित मागणी नोटिस. पूर्वावलोकनासाठी मालमत्ता निवडा.',
+  'not.lbl':'मालमत्ता निवडा:','not.print':'प्रिंट',
+  'mod.loc':'स्थान','mod.type':'बदल प्रकार','mod.dt':'आढळल्याची तारीख',
+  'mod.pri':'प्राधान्य','mod.own':'मालक (डेमो)','mod.tax':'अंदाजे कर तफावत',
+  'mod.scores':'AI विश्वास गुण','mod.tl':'घटनाक्रम',
+  'mod.genbtn':'मागणी नोटिस तयार करा'
+}};
+
+window.CL='en'; // current language
+window.CP='overview'; // current page key
+
+function t(k){return (T[window.CL]&&T[window.CL][k])||T.en[k]||k;}
+
+function applyLang(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>el.textContent=t(el.getAttribute('data-i18n')));
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>el.placeholder=t(el.getAttribute('data-i18n-ph')));
+  const tbTitle=document.getElementById('tbTitle');
+  if(tbTitle) tbTitle.textContent=t('page.'+window.CP);
+}
+
+function setLang(code){
+  window.CL=code;
+  const codes=['en','hi','mr'];
+  const idx=codes.indexOf(code);
+  ['llang','tblang'].forEach(gid=>{
+    const g=document.getElementById(gid);
+    if(!g)return;
+    const btns=g.querySelectorAll('.lang-btn');
+    btns.forEach(b=>b.classList.remove('act'));
+    if(idx>=0&&btns[idx])btns[idx].classList.add('act');
+  });
+  applyLang();
+  // Re-render dynamic content that uses translations
+  renderTable();
+}
+
 // ══════════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════════
@@ -809,6 +1076,7 @@ function doLogin(){
     document.getElementById('app').style.display='block';
     setTimeout(()=>{initRevMap();initPipelineBars();renderTable();renderNotice();},300);
   } else {
+    err.textContent=t('l.err');
     err.style.display='block';
   }
 }
@@ -818,16 +1086,13 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&document.getElementB
 // ══════════════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════════════
-const PAGE_TITLES={overview:'Dashboard Overview',phase0:'Phase 0 — Base Layer',
-  revmap:'RevMap',detect:'Change Detection',pipeline:'AI Pipeline',
-  queue:'Priority Queue',notice:'AutoNotice'};
-
 function nav(page,el){
   document.querySelectorAll('.pg').forEach(p=>p.classList.remove('act'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('act'));
   document.getElementById('pg-'+page).classList.add('act');
   if(el)el.classList.add('act');
-  document.getElementById('tbTitle').textContent=PAGE_TITLES[page]||page;
+  window.CP=page;
+  document.getElementById('tbTitle').textContent=t('page.'+page);
   if(page==='detect'&&!detectReady){setTimeout(()=>{initDetectMaps();detectReady=true;},150);}
   if(page==='revmap'){setTimeout(()=>{if(revMap)revMap.invalidateSize();},200);}
 }
@@ -1126,7 +1391,7 @@ function renderTable(){
         <span style="font-weight:800;font-size:.76rem;color:${c}">${p.score}</span>
       </div></td>
       <td style="font-weight:700;color:${p.tax==='₹0'?'var(--green)':'var(--red)'}">${p.tax}/yr</td>
-      <td><button class="vbtn" onclick="event.stopPropagation();openModal('${p.id}')">Details</button></td>`;
+      <td><button class="vbtn" onclick="event.stopPropagation();openModal('${p.id}')">${t('q.details')}</button></td>`;
     tb.appendChild(tr);
   });
 }
