@@ -10,9 +10,9 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --db:#37474F;--navy:#00695C;--orange:#00897B;--sky:#00796B;
-  --green:#007A4E;--red:#D32F2F;--yellow:#B07800;--white:#fff;
-  --light:#E0F2F1;--gray:#546E7A;--border:#E5E7EB;
+  --db:#0D1B2A;--navy:#1B335C;--orange:#F06A1A;--sky:#007EB5;
+  --green:#007A4E;--red:#C00000;--yellow:#B07800;--white:#fff;
+  --light:#F0F4F8;--gray:#556572;--border:#E2E8F0;
   --sw:240px;--th:60px;--r:8px;
   --sh:0 2px 12px rgba(0,0,0,.08);--shm:0 4px 24px rgba(0,0,0,.12);
 }
@@ -20,11 +20,11 @@ body{font-family:'Inter',sans-serif;background:var(--light);color:#1a1a1a;line-h
 button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 
 /* ── LOGIN ── */
-#loginScreen{min-height:100vh;background:linear-gradient(135deg,var(--db) 0%,#2E5954 50%,var(--navy) 100%);
+#loginScreen{min-height:100vh;background:linear-gradient(135deg,var(--db) 0%,#0F2035 50%,var(--navy) 100%);
   display:flex;align-items:center;justify-content:center;padding:1rem;position:relative;overflow:hidden}
 #loginScreen::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse at 25% 60%,rgba(0,105,92,.15) 0%,transparent 55%),
-             radial-gradient(ellipse at 75% 40%,rgba(0,137,123,.08) 0%,transparent 55%)}
+  background:radial-gradient(ellipse at 25% 60%,rgba(0,126,181,.1) 0%,transparent 55%),
+             radial-gradient(ellipse at 75% 40%,rgba(240,106,26,.07) 0%,transparent 55%)}
 .lcard{background:#fff;border-radius:16px;padding:2.5rem;width:100%;max-width:410px;
   box-shadow:0 24px 64px rgba(0,0,0,.35);position:relative;z-index:1;animation:fadeUp .5s ease}
 .llogo{text-align:center;margin-bottom:1.8rem}
@@ -33,7 +33,7 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .llogo-sub{font-size:.72rem;color:var(--gray);margin-top:4px;text-transform:uppercase;letter-spacing:.8px}
 .ldept{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--light);
   border-radius:6px;padding:8px 12px;margin-bottom:1.5rem;font-size:.75rem;color:var(--navy);font-weight:600}
-.lerr{background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.3);color:var(--red);
+.lerr{background:rgba(192,0,0,.08);border:1px solid rgba(192,0,0,.3);color:var(--red);
   padding:8px 12px;border-radius:6px;font-size:.78rem;margin-bottom:.8rem;display:none}
 .lform label{display:block;font-size:.72rem;font-weight:700;color:var(--gray);
   text-transform:uppercase;letter-spacing:.5px;margin-bottom:.3rem}
@@ -42,7 +42,7 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .lform input:focus{border-color:var(--sky)}
 .lbtn{width:100%;background:var(--orange);color:#fff;border:none;border-radius:var(--r);
   padding:12px;font-size:1rem;font-weight:700;transition:all .2s}
-.lbtn:hover{background:#004D40;transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,105,92,.4)}
+.lbtn:hover{background:#D45A0A;transform:translateY(-1px);box-shadow:0 4px 16px rgba(240,106,26,.4)}
 .lhint{text-align:center;font-size:.72rem;color:var(--gray);margin-top:.8rem}
 .lhint code{background:var(--light);padding:1px 5px;border-radius:3px}
 
@@ -65,7 +65,7 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
   color:rgba(255,255,255,.55);cursor:pointer;transition:all .2s;font-size:.82rem;font-weight:500;
   border-left:3px solid transparent;border-radius:0 6px 6px 0;margin:1px .5rem 1px 0}
 .ni:hover{background:rgba(255,255,255,.06);color:#fff}
-.ni.act{background:rgba(0,137,123,.18);border-left-color:var(--orange);color:#fff;font-weight:700}
+.ni.act{background:rgba(240,106,26,.14);border-left-color:var(--orange);color:#fff;font-weight:700}
 .ni .material-icons{font-size:1.05rem;opacity:.75}
 .ni.act .material-icons{opacity:1;color:var(--orange)}
 .ni-cnt{margin-left:auto;background:var(--red);color:#fff;font-size:.58rem;
@@ -79,7 +79,7 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .lout-btn{margin-top:.7rem;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
   color:rgba(255,255,255,.5);border-radius:6px;padding:6px;font-size:.72rem;
   display:flex;align-items:center;justify-content:center;gap:.3rem;transition:all .2s}
-.lout-btn:hover{background:rgba(211,47,47,.18);border-color:rgba(211,47,47,.4);color:#fff}
+.lout-btn:hover{background:rgba(192,0,0,.18);border-color:rgba(192,0,0,.4);color:#fff}
 
 /* MAIN */
 #mw{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
@@ -110,7 +110,7 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .card+.card{margin-top:1.2rem}
 .chdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem}
 .ctit{font-size:.9rem;font-weight:700;color:var(--db)}
-.ctag{font-size:.62rem;background:rgba(0,105,92,.1);color:var(--sky);
+.ctag{font-size:.62rem;background:rgba(0,126,181,.1);color:var(--sky);
   padding:2px 8px;border-radius:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase}
 
 /* STAT CARDS */
@@ -118,8 +118,8 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .sc{background:#fff;border-radius:var(--r);padding:1.1rem 1.3rem;box-shadow:var(--sh);
   border-left:4px solid var(--sky);display:flex;align-items:center;gap:.9rem}
 .sc.ora{border-left-color:var(--orange)}.sc.red{border-left-color:var(--red)}.sc.grn{border-left-color:var(--green)}
-.sico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(0,105,92,.1)}
-.sc.ora .sico{background:rgba(0,137,123,.12)}.sc.red .sico{background:rgba(211,47,47,.1)}.sc.grn .sico{background:rgba(0,122,78,.1)}
+.sico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:rgba(0,126,181,.1)}
+.sc.ora .sico{background:rgba(240,106,26,.1)}.sc.red .sico{background:rgba(192,0,0,.1)}.sc.grn .sico{background:rgba(0,122,78,.1)}
 .sico .material-icons{font-size:1.3rem;color:var(--sky)}
 .sc.ora .sico .material-icons{color:var(--orange)}.sc.red .sico .material-icons{color:var(--red)}.sc.grn .sico .material-icons{color:var(--green)}
 .snum{font-size:1.5rem;font-weight:800;color:var(--db);line-height:1}
@@ -135,28 +135,28 @@ button{cursor:pointer;font-family:inherit}input,select{font-family:inherit}
 .prwrap{margin:.5rem 0}
 .prlbl{display:flex;justify-content:space-between;font-size:.72rem;color:var(--gray);margin-bottom:.25rem}
 .prlbl strong{color:var(--db)}
-.prbar{background:#E5E7EB;border-radius:4px;height:7px;overflow:hidden}
+.prbar{background:#E2E8F0;border-radius:4px;height:7px;overflow:hidden}
 .prfill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--sky),var(--green));transition:width 1s .2s}
-.prfill.ora{background:linear-gradient(90deg,var(--orange),#26C6B9)}
+.prfill.ora{background:linear-gradient(90deg,var(--orange),#FF8C42)}
 
 /* BADGES */
 .badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:800;text-transform:uppercase}
-.b-high{background:rgba(211,47,47,.12);color:var(--red)}
+.b-high{background:rgba(192,0,0,.12);color:var(--red)}
 .b-med{background:rgba(176,120,0,.12);color:var(--yellow)}
 .b-low{background:rgba(0,122,78,.12);color:var(--green)}
-.b-done{background:rgba(0,105,92,.12);color:var(--sky)}
-.b-type{background:rgba(0,105,92,.1);color:var(--navy)}
+.b-done{background:rgba(0,126,181,.12);color:var(--sky)}
+.b-type{background:rgba(27,51,92,.1);color:var(--navy)}
 
 /* TABLE */
 .twrap{overflow-x:auto}
 table{width:100%;border-collapse:separate;border-spacing:0;font-size:.78rem}
 thead th{background:var(--navy);color:#fff;padding:9px 12px;text-align:left;
   font-size:.7rem;font-weight:700;letter-spacing:.3px;white-space:nowrap;cursor:pointer;user-select:none}
-thead th:hover{background:#004D40}
+thead th:hover{background:#243E70}
 tbody tr{background:#fff;cursor:pointer;transition:background .15s}
-tbody tr:hover{background:rgba(0,105,92,.05)}
-tbody tr:nth-child(even){background:#F5FDFB}
-td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
+tbody tr:hover{background:rgba(0,126,181,.04)}
+tbody tr:nth-child(even){background:#FAFCFF}
+td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 .vbtn{padding:3px 9px;background:var(--sky);color:#fff;border:none;border-radius:4px;
   font-size:.68rem;font-weight:700;cursor:pointer;transition:background .2s}
 .vbtn:hover{background:var(--navy)}
@@ -164,8 +164,8 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 /* BUTTONS */
 .btn{padding:7px 16px;border:none;border-radius:var(--r);font-size:.82rem;font-weight:600;
   cursor:pointer;display:inline-flex;align-items:center;gap:.35rem;transition:all .2s}
-.btn-p{background:var(--orange);color:#fff}.btn-p:hover{background:#004D40;transform:translateY(-1px)}
-.btn-s{background:var(--navy);color:#fff}.btn-s:hover{background:#2E3D45}
+.btn-p{background:var(--orange);color:#fff}.btn-p:hover{background:#D45A0A;transform:translateY(-1px)}
+.btn-s{background:var(--navy);color:#fff}.btn-s:hover{background:#243E70}
 .btn-o{background:#fff;color:var(--navy);border:2px solid var(--border)}.btn-o:hover{border-color:var(--navy)}
 .btn-sm{padding:5px 11px;font-size:.75rem}
 .material-icons{font-size:1rem}
@@ -189,7 +189,7 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 .zbars{display:flex;flex-direction:column;gap:.55rem}
 .zbi{display:flex;align-items:center;gap:.7rem;font-size:.76rem}
 .zn{width:32px;color:var(--gray);flex-shrink:0;font-size:.72rem}
-.zbar{flex:1;background:#E5E7EB;border-radius:3px;height:9px;overflow:hidden}
+.zbar{flex:1;background:#E2E8F0;border-radius:3px;height:9px;overflow:hidden}
 .zfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--green))}
 .zpct{width:34px;text-align:right;font-weight:700;color:var(--navy);font-size:.72rem}
 .insight{background:rgba(0,122,78,.07);border-radius:6px;padding:.9rem 1rem;border-left:3px solid var(--green);margin-top:1rem}
@@ -240,19 +240,19 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 .pmod{flex:1;min-width:160px;background:#fff;border-radius:10px;padding:1.1rem .85rem;
   text-align:center;box-shadow:var(--sh);border-top:4px solid var(--sky);transition:all .3s}
 .pmod:hover{transform:translateY(-3px);box-shadow:var(--shm)}
-.pmod.amod{border-top-color:var(--orange);background:#F0FBF9}
+.pmod.amod{border-top-color:var(--orange);background:#FFF8F4}
 .parr{display:flex;align-items:center;padding:0 .2rem;color:var(--sky);font-size:1.2rem;flex-shrink:0}
 .mnum{width:26px;height:26px;background:var(--sky);color:#fff;border-radius:50%;
   display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;margin:0 auto .5rem}
 .pmod.amod .mnum{background:var(--orange)}
 .mico{font-size:1.4rem;margin-bottom:.35rem}
 .mnm{font-size:.78rem;font-weight:800;color:var(--db);margin-bottom:.25rem}
-.malg{font-size:.63rem;color:var(--sky);font-weight:700;background:rgba(0,105,92,.1);
+.malg{font-size:.63rem;color:var(--sky);font-weight:700;background:rgba(0,126,181,.1);
   padding:2px 6px;border-radius:8px;margin-bottom:.5rem;display:inline-block}
-.pmod.amod .malg{color:var(--orange);background:rgba(0,137,123,.12)}
+.pmod.amod .malg{color:var(--orange);background:rgba(240,106,26,.1)}
 .mdes{font-size:.68rem;color:var(--gray);line-height:1.5}
 .mout{margin-top:.55rem;padding:4px 6px;background:var(--light);border-radius:5px;font-size:.65rem;color:var(--navy);font-weight:700}
-.cbar{margin-top:.55rem;background:#E5E7EB;border-radius:3px;height:5px;overflow:hidden}
+.cbar{margin-top:.55rem;background:#E2E8F0;border-radius:3px;height:5px;overflow:hidden}
 .cfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--green));width:0;transition:width 1.2s .3s}
 .pmod.amod .cfill{background:linear-gradient(90deg,var(--orange),var(--red))}
 .clbl{font-size:.6rem;color:var(--gray);text-align:right;margin-top:2px}
@@ -268,7 +268,7 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 .chips{display:flex;gap:.4rem;flex-wrap:wrap}
 .chip{padding:4px 11px;border-radius:20px;font-size:.7rem;font-weight:700;cursor:pointer;border:2px solid transparent;transition:all .2s}
 .chip-all{background:var(--navy);color:#fff}
-.chip-hi{background:rgba(211,47,47,.1);color:var(--red);border-color:rgba(211,47,47,.3)}
+.chip-hi{background:rgba(192,0,0,.1);color:var(--red);border-color:rgba(192,0,0,.3)}
 .chip-me{background:rgba(176,120,0,.1);color:var(--yellow);border-color:rgba(176,120,0,.3)}
 .chip-lo{background:rgba(0,122,78,.1);color:var(--green);border-color:rgba(0,122,78,.3)}
 .srch{padding:6px 11px;border:2px solid var(--border);border-radius:6px;font-size:.78rem;
@@ -320,26 +320,26 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 .mscbox h4{font-size:.77rem;color:var(--navy);margin-bottom:.6rem;font-weight:800}
 .scrow{display:flex;align-items:center;gap:.65rem;margin-bottom:.45rem}
 .sclbl{font-size:.7rem;color:var(--gray);width:130px;flex-shrink:0}
-.scbar{flex:1;background:#E5E7EB;border-radius:3px;height:6px}
+.scbar{flex:1;background:#DDE4EC;border-radius:3px;height:6px}
 .scfill{height:100%;border-radius:3px;background:var(--green);transition:width 1s .2s}
 .scpct{font-size:.68rem;font-weight:800;color:var(--navy);width:32px;text-align:right}
 .tl h4{font-size:.77rem;color:var(--navy);margin-bottom:.6rem;font-weight:800}
 .tli{display:flex;gap:.6rem;margin-bottom:.55rem}
 .tlcol{display:flex;flex-direction:column;align-items:center}
 .tldot{width:9px;height:9px;border-radius:50%;background:var(--sky);flex-shrink:0}
-.tlline{width:2px;flex:1;background:#E5E7EB;min-height:14px}
+.tlline{width:2px;flex:1;background:#DDE4EC;min-height:14px}
 .tldate{font-size:.64rem;color:var(--gray)}
 .tlev{font-size:.76rem;color:var(--db);font-weight:600}
 .genbtn{width:100%;padding:10px;background:var(--orange);color:#fff;border:none;
   border-radius:8px;font-size:.88rem;font-weight:700;cursor:pointer;
   display:flex;align-items:center;justify-content:center;gap:.4rem;transition:all .2s;margin-top:.9rem}
-.genbtn:hover{background:#004D40;transform:translateY(-1px)}
+.genbtn:hover{background:#D45A0A;transform:translateY(-1px)}
 
 /* ANIMATIONS */
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-@keyframes pls{0%{box-shadow:0 0 0 0 rgba(211,47,47,.65),0 2px 8px rgba(0,0,0,.4)}
-  70%{box-shadow:0 0 0 13px rgba(211,47,47,0),0 2px 8px rgba(0,0,0,.4)}
-  100%{box-shadow:0 0 0 0 rgba(211,47,47,0),0 2px 8px rgba(0,0,0,.4)}}
+@keyframes pls{0%{box-shadow:0 0 0 0 rgba(192,0,0,.65),0 2px 8px rgba(0,0,0,.4)}
+  70%{box-shadow:0 0 0 13px rgba(192,0,0,0),0 2px 8px rgba(0,0,0,.4)}
+  100%{box-shadow:0 0 0 0 rgba(192,0,0,0),0 2px 8px rgba(0,0,0,.4)}}
 </style>
 </head>
 <body>
@@ -528,13 +528,13 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
         <div class="card">
           <div class="chdr"><div class="ctit">Phase Transition Pipeline</div><span class="ctag">Status</span></div>
           <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
-            <div style="flex:1;min-width:170px;background:rgba(0,105,92,.08);border:2px solid rgba(0,105,92,.3);border-radius:8px;padding:1rem;text-align:center">
+            <div style="flex:1;min-width:170px;background:rgba(0,126,181,.08);border:2px solid rgba(0,126,181,.3);border-radius:8px;padding:1rem;text-align:center">
               <div style="font-size:1.4rem">🗃</div>
               <div style="font-size:.8rem;font-weight:800;color:var(--sky);margin:.3rem 0">Phase 0</div>
               <div style="font-size:.68rem;color:var(--gray)">Ground Truth Base Layer<br>Enrollment + Reconciliation<br><strong style="color:var(--green)">Active — 68.5%</strong></div>
             </div>
             <div style="font-size:1.3rem;color:var(--sky);padding:0 .3rem">→</div>
-            <div style="flex:1;min-width:170px;background:rgba(0,137,123,.07);border:2px dashed rgba(0,137,123,.4);border-radius:8px;padding:1rem;text-align:center">
+            <div style="flex:1;min-width:170px;background:rgba(240,106,26,.07);border:2px dashed rgba(240,106,26,.4);border-radius:8px;padding:1rem;text-align:center">
               <div style="font-size:1.4rem">🛰</div>
               <div style="font-size:.8rem;font-weight:800;color:var(--orange);margin:.3rem 0">Phase 1</div>
               <div style="font-size:.68rem;color:var(--gray)">Satellite AI Monitoring<br>30-day change detection<br><strong style="color:var(--orange)">Starts at 80% enrollment</strong></div>
@@ -562,10 +562,10 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
           <div id="revMap"></div>
           <div class="mleg">
             <div class="mleg-t">Change Status</div>
-            <div class="mli"><div class="mldot" style="background:#D32F2F"></div>High Priority</div>
+            <div class="mli"><div class="mldot" style="background:#C00000"></div>High Priority</div>
             <div class="mli"><div class="mldot" style="background:#E8A000"></div>Medium</div>
             <div class="mli"><div class="mldot" style="background:#007A4E"></div>Low / Cleared</div>
-            <div class="mli"><div class="mldot" style="background:#00695C"></div>Under Review</div>
+            <div class="mli"><div class="mldot" style="background:#007EB5"></div>Under Review</div>
           </div>
         </div>
         <div class="slog" id="slogEl"></div>
@@ -590,9 +590,9 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
           <div class="mlabel ml-r">📅 Jan 2026 — AI Detection</div>
         </div>
         <div class="cleg">
-          <div class="clegi"><div class="clegb" style="background:rgba(0,105,92,.45);border:2px solid #00695C"></div>Registered Buildings (OSM)</div>
-          <div class="clegi"><div class="clegb" style="background:rgba(211,47,47,.4);border:2px solid #D32F2F"></div>Floor Addition / Expansion Detected</div>
-          <div class="clegi"><div class="clegb" style="background:rgba(0,137,123,.4);border:2px solid #00897B"></div>New Construction Detected</div>
+          <div class="clegi"><div class="clegb" style="background:rgba(0,126,181,.45);border:2px solid #007EB5"></div>Registered Buildings (OSM)</div>
+          <div class="clegi"><div class="clegb" style="background:rgba(192,0,0,.4);border:2px solid #C00000"></div>Floor Addition / Expansion Detected</div>
+          <div class="clegi"><div class="clegb" style="background:rgba(240,106,26,.4);border:2px solid #F06A1A"></div>New Construction Detected</div>
         </div>
         <div class="osm-note"><strong>Note:</strong> Satellite imagery © Esri, USGS, NGA, NASA — real imagery of CSM. Building outlines from OpenStreetMap via Overpass API (live). Red/orange polygons = simulated AI change detections for demo purposes.</div>
       </div>
@@ -698,7 +698,7 @@ td{padding:8px 12px;border-bottom:1px solid #E5E7EB;color:#333}
 // ══════════════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════════════
-const PC = {HIGH:'#D32F2F',MEDIUM:'#E8A000',LOW:'#007A4E',REVIEW:'#00695C',CLEARED:'#778899'};
+const PC = {HIGH:'#C00000',MEDIUM:'#E8A000',LOW:'#007A4E',REVIEW:'#007EB5',CLEARED:'#778899'};
 const PB = {HIGH:'b-high',MEDIUM:'b-med',LOW:'b-low',REVIEW:'b-done',CLEARED:'b-done'};
 
 const PROPS = [
@@ -895,15 +895,15 @@ function triggerScan(){
         const m=L.marker([p.lat,p.lng],{icon:makeIcon(color,16,pulse)}).addTo(revMap);
         m.bindPopup(`
           <div style="font-family:Inter,sans-serif;min-width:200px">
-            <div style="font-weight:800;font-size:.88rem;color:#37474F">${p.id}</div>
-            <div style="font-size:.72rem;color:#546E7A;margin-bottom:5px">${p.name}</div>
+            <div style="font-weight:800;font-size:.88rem;color:#0D1B2A">${p.id}</div>
+            <div style="font-size:.72rem;color:#556572;margin-bottom:5px">${p.name}</div>
             <div style="display:flex;gap:5px;align-items:center;margin-bottom:6px">
               <span style="background:${color}22;color:${color};padding:2px 7px;border-radius:8px;font-size:.66rem;font-weight:800">${p.priority}</span>
-              <span style="font-size:.72rem;color:#00695C;font-weight:700">Score: ${p.score}/100</span>
+              <span style="font-size:.72rem;color:#1B335C;font-weight:700">Score: ${p.score}/100</span>
             </div>
             <div style="font-size:.74rem;color:#333;margin-bottom:2px"><b>Type:</b> ${p.type}</div>
             <div style="font-size:.74rem;color:#333;margin-bottom:6px"><b>Tax Gap:</b> ${p.tax}/yr</div>
-            <button onclick="openModal('${p.id}')" style="width:100%;padding:6px;background:#00695C;color:#fff;border:none;border-radius:4px;font-size:.72rem;font-weight:700;cursor:pointer">📋 View Analysis</button>
+            <button onclick="openModal('${p.id}')" style="width:100%;padding:6px;background:#007EB5;color:#fff;border:none;border-radius:4px;font-size:.72rem;font-weight:700;cursor:pointer">📋 View Analysis</button>
           </div>`);
         mObjs.push(m);
         const poly=L.polygon(p.poly,{color,fillColor:color,fillOpacity:.22,weight:2.5}).addTo(revMap);
@@ -946,13 +946,13 @@ const SAT_TILES=()=>L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/ser
 const CHANGE_POLYS=[
   // Floor addition + expansion on existing building (red)
   {coords:[[19.8769,75.3441],[19.8773,75.3441],[19.8773,75.3447],[19.8769,75.3447]],
-   color:'#D32F2F',label:'CSM-N6-0082: Floor Addition + Expansion'},
-  // New construction (teal accent)
+   color:'#C00000',label:'CSM-N6-0082: Floor Addition + Expansion'},
+  // New construction (orange)
   {coords:[[19.8752,75.3448],[19.8757,75.3448],[19.8757,75.3455],[19.8752,75.3455]],
-   color:'#00897B',label:'CSM-N6-0095: New Construction'},
+   color:'#F06A1A',label:'CSM-N6-0095: New Construction'},
   // Another expansion (red)
   {coords:[[19.8776,75.3435],[19.8781,75.3435],[19.8781,75.3442],[19.8776,75.3442]],
-   color:'#D32F2F',label:'CSM-N6-0031: Unauthorized Structure'},
+   color:'#C00000',label:'CSM-N6-0031: Unauthorized Structure'},
 ];
 
 function initDetectMaps(){
@@ -966,7 +966,7 @@ function initDetectMaps(){
   // Add change polygons only to After map
   CHANGE_POLYS.forEach(cp=>{
     L.polygon(cp.coords,{color:cp.color,fillColor:cp.color,fillOpacity:.38,weight:3,
-      dashArray:cp.color==='#00897B'?'6,4':null})
+      dashArray:cp.color==='#F06A1A'?'6,4':null})
       .bindTooltip(cp.label,{permanent:false,direction:'top'})
       .addTo(mapAfter);
   });
@@ -997,7 +997,7 @@ function loadOSMBuildings(){
       data.elements.forEach(el=>{
         if(el.type==='way'&&el.geometry&&el.geometry.length>2){
           const coords=el.geometry.map(p=>[p.lat,p.lon]);
-          const style={color:'#00695C',weight:1.5,fillColor:'#00695C',fillOpacity:.18};
+          const style={color:'#007EB5',weight:1.5,fillColor:'#007EB5',fillOpacity:.18};
           L.polygon(coords,style).addTo(mapBefore);
           L.polygon(coords,style).addTo(mapAfter);
           count++;
@@ -1020,7 +1020,7 @@ function loadOSMBuildings(){
         [[19.8778,75.3450],[19.8782,75.3450],[19.8782,75.3456],[19.8778,75.3456]],
       ];
       fallback.forEach(c=>{
-        const s={color:'#00695C',weight:1.5,fillColor:'#00695C',fillOpacity:.18};
+        const s={color:'#007EB5',weight:1.5,fillColor:'#007EB5',fillOpacity:.18};
         L.polygon(c,s).addTo(mapBefore);L.polygon(c,s).addTo(mapAfter);
       });
       osmLoaded=true;
@@ -1120,8 +1120,8 @@ function renderTable(){
       <td>${p.detected}</td>
       <td><span class="badge ${PB[p.priority]}">${p.priority}</span></td>
       <td><div style="display:flex;align-items:center;gap:5px">
-        <div style="flex:1;background:#E5E7EB;border-radius:3px;height:5px">
-          <div style="width:${p.score}%;height:100%;background:${p.score>70?'#D32F2F':p.score>50?'#E8A000':'#007A4E'};border-radius:3px"></div>
+        <div style="flex:1;background:#DDE4EC;border-radius:3px;height:5px">
+          <div style="width:${p.score}%;height:100%;background:${p.score>70?'#C00000':p.score>50?'#E8A000':'#007A4E'};border-radius:3px"></div>
         </div>
         <span style="font-weight:800;font-size:.76rem;color:${c}">${p.score}</span>
       </div></td>
@@ -1160,13 +1160,13 @@ function openModal(id){
   document.getElementById('m-sc').innerHTML=p.scores.map(s=>`
     <div class="scrow">
       <div class="sclbl">${s.l}</div>
-      <div class="scbar"><div class="scfill" style="width:${s.v}%;background:${s.v>80?'#007A4E':s.v>60?'#E8A000':'#D32F2F'}"></div></div>
+      <div class="scbar"><div class="scfill" style="width:${s.v}%;background:${s.v>80?'#007A4E':s.v>60?'#E8A000':'#C00000'}"></div></div>
       <div class="scpct">${s.v}%</div>
     </div>`).join('');
   document.getElementById('m-tl').innerHTML=p.tl.map((t,i)=>`
     <div class="tli">
       <div class="tlcol">
-        <div class="tldot" style="background:${i===p.tl.length-1?'#00897B':'#00695C'}"></div>
+        <div class="tldot" style="background:${i===p.tl.length-1?'#F06A1A':'#007EB5'}"></div>
         ${i<p.tl.length-1?'<div class="tlline"></div>':''}
       </div>
       <div style="padding-bottom:.5rem">
