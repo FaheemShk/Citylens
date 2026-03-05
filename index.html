@@ -215,9 +215,9 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 .detinfo{font-size:.76rem;color:var(--gray);background:var(--light);border-radius:6px;
   padding:7px 11px;border-left:3px solid var(--sky);flex:1;line-height:1.6}
 .couter{position:relative;width:100%;height:470px;border-radius:var(--r);
-  overflow:hidden;box-shadow:var(--shm);cursor:ew-resize;background:#1a1a2e}
+  overflow:hidden;box-shadow:var(--shm);cursor:ew-resize;background:#1a1a2e;isolation:isolate}
 #mapBefore{position:absolute;inset:0;z-index:1}
-#afterWrapper{position:absolute;inset:0;z-index:2;clip-path:inset(0 50% 0 0)}
+#afterWrapper{position:absolute;inset:0;z-index:2;clip-path:inset(0 0 0 50%)}
 #mapAfter{position:absolute;inset:0}
 .cdiv{position:absolute;top:0;left:50%;width:3px;height:100%;
   background:#fff;z-index:10;transform:translateX(-50%);pointer-events:none}
@@ -547,7 +547,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
             </div>
             <div class="insight">
               <div class="insight-title" data-i18n="p0.insight">Phase 0 Key Insight</div>
-              <div class="insight-body">₹28.4 Cr recovery from base layer reconciliation alone — before satellite AI begins. MCGM Mumbai, Pune PMC & GHMC Hyderabad achieved 20–40% additional annual tax revenue from similar GIS enrollment drives.</div>
+              <div class="insight-body">₹28.4 Cr recovery from base layer reconciliation alone — before satellite AI begins.</div>
             </div>
           </div>
         </div>
@@ -604,7 +604,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
           <div class="detinfo">
             <strong>Area:</strong> MGM University, Rukmani Auditorium, N-6, CSM &nbsp;|&nbsp;
             <strong>Imagery:</strong> Esri World Satellite (real) + OSM Buildings (live) &nbsp;|&nbsp;
-            <strong>Baseline:</strong> Jan 2024 &nbsp;|&nbsp; <strong>Current:</strong> Jan 2026
+            <strong>Baseline:</strong> Jan 2025 &nbsp;|&nbsp; <strong>Current:</strong> Jan 2026
           </div>
           <button class="btn btn-p btn-sm" id="osmBtn" onclick="loadOSMBuildings()"><span class="material-icons">layers</span><span data-i18n="det.osm">Load OSM Buildings</span></button>
         </div>
@@ -612,13 +612,13 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
           <div id="mapBefore"></div>
           <div id="afterWrapper"><div id="mapAfter"></div></div>
           <div class="cdiv" id="compDiv"><div class="chandle">⇔</div></div>
-          <div class="mlabel ml-l">📅 Jan 2024 — Baseline</div>
+          <div class="mlabel ml-l">📅 Jan 2025 — Baseline</div>
           <div class="mlabel ml-r">📅 Jan 2026 — AI Detection</div>
         </div>
         <div class="cleg">
-          <div class="clegi"><div class="clegb" style="background:rgba(0,126,181,.45);border:2px solid #007EB5"></div><span data-i18n="det.leg1">Registered Buildings (OSM)</span></div>
-          <div class="clegi"><div class="clegb" style="background:rgba(192,0,0,.4);border:2px solid #C00000"></div><span data-i18n="det.leg2">Floor Addition / Expansion Detected</span></div>
-          <div class="clegi"><div class="clegb" style="background:rgba(240,106,26,.4);border:2px solid #F06A1A"></div><span data-i18n="det.leg3">New Construction Detected</span></div>
+          <div class="clegi"><div class="clegb" style="background:rgba(0,122,78,.4);border:2px solid #007A4E"></div><span data-i18n="det.leg1">Registered Buildings — Unchanged</span></div>
+          <div class="clegi"><div class="clegb" style="background:rgba(232,160,0,.4);border:2px dashed #E8A000"></div><span data-i18n="det.leg2">Floor Addition / Modification Detected</span></div>
+          <div class="clegi"><div class="clegb" style="background:rgba(192,0,0,.4);border:2px solid #C00000"></div><span data-i18n="det.leg3">New Construction Detected</span></div>
         </div>
         <div class="osm-note"><strong>Note:</strong> Satellite imagery © Esri, USGS, NGA, NASA — real imagery of CSM. Building outlines from OpenStreetMap via Overpass API (live). Red/orange polygons = simulated AI change detections for demo purposes.</div>
       </div>
@@ -774,8 +774,8 @@ en:{
   'det.h1':'Satellite Change Detection',
   'det.p':'Real satellite imagery of Chhatrapati Sambhajinagar. OSM building footprints loaded live. Drag slider to compare baseline vs. AI-detected changes.',
   'det.osm':'Load OSM Buildings',
-  'det.leg1':'Registered Buildings (OSM)',
-  'det.leg2':'Floor Addition / Expansion Detected',
+  'det.leg1':'Registered Buildings — Unchanged',
+  'det.leg2':'Floor Addition / Modification Detected',
   'det.leg3':'New Construction Detected',
   'pip.h1':'AI Processing Pipeline',
   'pip.p':'5-module sequential engine. Every satellite acquisition processes all 500K parcels in 24–48 hours.',
@@ -844,8 +844,8 @@ hi:{
   'det.h1':'उपग्रह परिवर्तन पहचान',
   'det.p':'छत्रपति संभाजीनगर की वास्तविक उपग्रह छवि। OSM भवन पदचिह्न लाइव लोड। बेसलाइन बनाम AI-पहचाने गए परिवर्तनों की तुलना करें।',
   'det.osm':'OSM इमारतें लोड करें',
-  'det.leg1':'पंजीकृत इमारतें (OSM)',
-  'det.leg2':'मंजिल जोड़ / विस्तार पहचाना गया',
+  'det.leg1':'पंजीकृत इमारतें — अपरिवर्तित',
+  'det.leg2':'मंजिल जोड़ / परिवर्तन पहचाना गया',
   'det.leg3':'नई निर्माण पहचानी गई',
   'pip.h1':'AI प्रसंस्करण पाइपलाइन',
   'pip.p':'5-मॉड्यूल अनुक्रमिक इंजन। हर उपग्रह अधिग्रहण 24–48 घंटों में 500K भूखंड प्रसंस्कृत करता है।',
@@ -914,8 +914,8 @@ mr:{
   'det.h1':'उपग्रह बदल शोध',
   'det.p':'छत्रपती संभाजीनगरचे वास्तविक उपग्रह चित्र. OSM इमारत ठसे थेट लोड. बेसलाइन विरुद्ध AI-आढळलेल्या बदलांची तुलना करा.',
   'det.osm':'OSM इमारती लोड करा',
-  'det.leg1':'नोंदणीकृत इमारती (OSM)',
-  'det.leg2':'मजला जोड / विस्तार आढळला',
+  'det.leg1':'नोंदणीकृत इमारती — अपरिवर्तित',
+  'det.leg2':'मजला जोड / बदल आढळला',
   'det.leg3':'नवीन बांधकाम आढळले',
   'pip.h1':'AI प्रक्रिया पाइपलाइन',
   'pip.p':'5-मॉड्युल अनुक्रमिक इंजन. प्रत्येक उपग्रह अधिग्रहण 24–48 तासांत 500K भूखंड प्रक्रिया करते.',
@@ -1210,43 +1210,27 @@ const SAT_TILES=()=>L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/ser
   attribution:'Tiles © Esri — Source: Esri, USGS, NGA, NASA',maxZoom:19});
 
 // Simulated change polygons (added to After map only)
+// isNew:true = new construction (red), isNew:false = modification to existing (orange)
 const CHANGE_POLYS=[
-  // Floor addition + expansion on existing building (red)
   {coords:[[19.8769,75.3441],[19.8773,75.3441],[19.8773,75.3447],[19.8769,75.3447]],
-   color:'#C00000',label:'CSM-N6-0082: Floor Addition + Expansion'},
-  // New construction (orange)
-  {coords:[[19.8752,75.3448],[19.8757,75.3448],[19.8757,75.3455],[19.8752,75.3455]],
-   color:'#F06A1A',label:'CSM-N6-0095: New Construction'},
-  // Another expansion (red)
+   color:'#E8A000',label:'CSM-N6-0082: Floor Addition + Expansion',isNew:false},
+  {coords:[[19.8748,75.3467],[19.8752,75.3467],[19.8752,75.3474],[19.8748,75.3474]],
+   color:'#C00000',label:'CSM-N6-0095: New Construction',isNew:true},
   {coords:[[19.8776,75.3435],[19.8781,75.3435],[19.8781,75.3442],[19.8776,75.3442]],
-   color:'#C00000',label:'CSM-N6-0031: Unauthorized Structure'},
+   color:'#E8A000',label:'CSM-N6-0031: Unauthorized Structure',isNew:false},
 ];
 
 function initDetectMaps(){
   if(mapBefore||mapAfter)return;
   const C=[19.8762,75.3433];const Z=17;
-  mapBefore=L.map('mapBefore',{zoomControl:true,attributionControl:true}).setView(C,Z);
+  // Both maps locked — no dragging/zooming so frames stay identical
+  const lockOpts={dragging:false,touchZoom:false,scrollWheelZoom:false,
+    doubleClickZoom:false,boxZoom:false,keyboard:false};
+  mapBefore=L.map('mapBefore',{...lockOpts,zoomControl:false,attributionControl:true}).setView(C,Z);
   SAT_TILES().addTo(mapBefore);
-  mapAfter=L.map('mapAfter',{zoomControl:false,attributionControl:false}).setView(C,Z);
+  mapAfter=L.map('mapAfter',{...lockOpts,zoomControl:false,attributionControl:false}).setView(C,Z);
   SAT_TILES().addTo(mapAfter);
 
-  // Add change polygons only to After map
-  CHANGE_POLYS.forEach(cp=>{
-    L.polygon(cp.coords,{color:cp.color,fillColor:cp.color,fillOpacity:.38,weight:3,
-      dashArray:cp.color==='#F06A1A'?'6,4':null})
-      .bindTooltip(cp.label,{permanent:false,direction:'top'})
-      .addTo(mapAfter);
-  });
-
-  // Sync maps
-  function syncMaps(src,dst){
-    if(syncing)return;syncing=true;
-    dst.setView(src.getCenter(),src.getZoom(),{animate:false});
-    syncing=false;
-  }
-  mapBefore.on('moveend',()=>syncMaps(mapBefore,mapAfter));
-  mapAfter.on('moveend',()=>syncMaps(mapAfter,mapBefore));
-  mapBefore.on('zoomend',()=>syncMaps(mapBefore,mapAfter));
 }
 
 function loadOSMBuildings(){
@@ -1257,6 +1241,14 @@ function loadOSMBuildings(){
   btn.disabled=true;
   const bbox='19.870,75.338,19.884,75.350';
   const q=`[out:json][timeout:25];(way["building"](${bbox}););out geom;`;
+  // Bounds of modification-type change polygons (for overlap check)
+  const modBounds=CHANGE_POLYS.filter(cp=>!cp.isNew).map(cp=>L.latLngBounds(cp.coords));
+  function afterStyle(coords){
+    const bb=L.latLngBounds(coords);
+    const modified=modBounds.some(mb=>bb.intersects(mb));
+    const c=modified?'#E8A000':'#007A4E';
+    return {color:c,weight:1.8,fillColor:c,fillOpacity:.3};
+  }
   fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q))
     .then(r=>r.json())
     .then(data=>{
@@ -1264,34 +1256,49 @@ function loadOSMBuildings(){
       data.elements.forEach(el=>{
         if(el.type==='way'&&el.geometry&&el.geometry.length>2){
           const coords=el.geometry.map(p=>[p.lat,p.lon]);
-          const style={color:'#007EB5',weight:1.5,fillColor:'#007EB5',fillOpacity:.18};
-          L.polygon(coords,style).addTo(mapBefore);
-          L.polygon(coords,style).addTo(mapAfter);
+          L.polygon(coords,afterStyle(coords)).addTo(mapAfter);
           count++;
         }
       });
       osmLoaded=true;
-      btn.innerHTML=`<span class="material-icons">check_circle</span>${count} Buildings Loaded`;
+      // Now render change polygons — Orange (dashed)=modification, Red (solid)=new construction
+      let newCount=0,modCount=0;
+      CHANGE_POLYS.forEach(cp=>{
+        if(cp.isNew)newCount++;else modCount++;
+        L.polygon(cp.coords,{color:cp.color,fillColor:cp.color,fillOpacity:.65,weight:4,
+          dashArray:cp.isNew?null:'6,4'})
+          .bindTooltip(cp.label,{permanent:false,direction:'top'})
+          .addTo(mapAfter);
+      });
+      btn.innerHTML=`<span class="material-icons">check_circle</span>${count} Buildings | ${newCount} 🔴 New · ${modCount} 🟠 Modified`;
       btn.style.background='var(--green)';
     })
     .catch(()=>{
       btn.innerHTML='<span class="material-icons">error</span>API Unavailable';
       btn.disabled=false;
       btn.style.background='var(--red)';
-      // fallback: add a few hardcoded polygons
+      // fallback: hardcoded polygons — mix of unchanged (green) and modified (orange)
       const fallback=[
-        [[19.8764,75.3430],[19.8768,75.3430],[19.8768,75.3436],[19.8764,75.3436]],
-        [[19.8758,75.3438],[19.8762,75.3438],[19.8762,75.3444],[19.8758,75.3444]],
-        [[19.8770,75.3428],[19.8774,75.3428],[19.8774,75.3434],[19.8770,75.3434]],
-        [[19.8752,75.3440],[19.8756,75.3440],[19.8756,75.3446],[19.8752,75.3446]],
-        [[19.8778,75.3450],[19.8782,75.3450],[19.8782,75.3456],[19.8778,75.3456]],
+        {c:[[19.8764,75.3430],[19.8768,75.3430],[19.8768,75.3436],[19.8764,75.3436]],mod:false},
+        {c:[[19.8758,75.3438],[19.8762,75.3438],[19.8762,75.3444],[19.8758,75.3444]],mod:false},
+        {c:[[19.8770,75.3428],[19.8774,75.3428],[19.8774,75.3434],[19.8770,75.3434]],mod:false},
+        {c:[[19.8769,75.3440],[19.8773,75.3440],[19.8773,75.3448],[19.8769,75.3448]],mod:true},
+        {c:[[19.8776,75.3434],[19.8781,75.3434],[19.8781,75.3443],[19.8776,75.3443]],mod:true},
       ];
-      fallback.forEach(c=>{
-        const s={color:'#007EB5',weight:1.5,fillColor:'#007EB5',fillOpacity:.18};
-        L.polygon(c,s).addTo(mapBefore);L.polygon(c,s).addTo(mapAfter);
+      fallback.forEach(f=>{
+        const ac=f.mod?'#E8A000':'#007A4E';
+        L.polygon(f.c,{color:ac,weight:1.8,fillColor:ac,fillOpacity:.3}).addTo(mapAfter);
       });
       osmLoaded=true;
-      setTimeout(()=>{btn.innerHTML='<span class="material-icons">layers</span>Buildings (Fallback)';btn.disabled=true;},1500);
+      let newCount=0,modCount=0;
+      CHANGE_POLYS.forEach(cp=>{
+        if(cp.isNew)newCount++;else modCount++;
+        L.polygon(cp.coords,{color:cp.color,fillColor:cp.color,fillOpacity:.65,weight:4,
+          dashArray:cp.isNew?null:'6,4'})
+          .bindTooltip(cp.label,{permanent:false,direction:'top'})
+          .addTo(mapAfter);
+      });
+      setTimeout(()=>{btn.innerHTML=`<span class="material-icons">layers</span>Fallback | ${newCount} 🔴 New · ${modCount} 🟠 Modified`;btn.disabled=true;},1500);
     });
 }
 
@@ -1303,7 +1310,7 @@ let drag=false;
 function setSlider(x){
   const r=couter().getBoundingClientRect();
   let p=Math.max(.04,Math.min(.96,(x-r.left)/r.width));
-  aWrap().style.clipPath=`inset(0 ${((1-p)*100).toFixed(1)}% 0 0)`;
+  aWrap().style.clipPath=`inset(0 0 0 ${(p*100).toFixed(1)}%)`;
   cDiv().style.left=(p*100).toFixed(1)+'%';
 }
 document.addEventListener('DOMContentLoaded',()=>{
