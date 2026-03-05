@@ -458,7 +458,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
           <div class="sc red"><div class="sico"><span class="material-icons">warning</span></div>
             <div><div class="snum">1,247</div><div class="slbl" data-i18n="ov.slbl2">Flagged (Latest Scan)</div><div class="schg wrn" data-i18n="ov.schg2">3 HIGH priority</div></div></div>
           <div class="sc ora"><div class="sico"><span class="material-icons">pending_actions</span></div>
-            <div><div class="snum">84</div><div class="slbl" data-i18n="ov.slbl3">Pending Verification</div><div class="schg wrn" data-i18n="ov.schg3">12 assigned to you</div></div></div>
+            <div><div class="snum">61</div><div class="slbl" data-i18n="ov.slbl3">Pending Verification</div><div class="schg wrn" data-i18n="ov.schg3">65 assigned to you</div></div></div>
           <div class="sc grn"><div class="sico"><span class="material-icons">description</span></div>
             <div><div class="snum">312</div><div class="slbl" data-i18n="ov.slbl4">Notices (2026)</div><div class="schg up" data-i18n="ov.schg4">▲ ₹42L initiated</div></div></div>
         </div>
@@ -760,7 +760,7 @@ en:{
   'ov.p':'Chhatrapati Sambhajinagar — N-6 Zone — Satellite Scan: 15 January 2026',
   'ov.slbl1':'Parcels Monitored','ov.schg1':'▲ 100% city coverage',
   'ov.slbl2':'Flagged (Latest Scan)','ov.schg2':'3 HIGH priority',
-  'ov.slbl3':'Pending Verification','ov.schg3':'12 assigned to you',
+  'ov.slbl3':'Pending Verification','ov.schg3':'65 assigned to you',
   'ov.slbl4':'Notices (2026)','ov.schg4':'▲ ₹42L initiated',
   'ov.p0h':'Ground Truth Base Layer',
   'ov.p0p':'Building the verified property master database. Recovering revenue before satellite AI cycles begin.',
@@ -830,7 +830,7 @@ hi:{
   'ov.p':'छत्रपति संभाजीनगर — N-6 क्षेत्र — उपग्रह स्कैन: 15 जनवरी 2026',
   'ov.slbl1':'निगरानी में भूखंड','ov.schg1':'▲ 100% शहर कवरेज',
   'ov.slbl2':'चिह्नित (नवीनतम स्कैन)','ov.schg2':'3 उच्च प्राथमिकता',
-  'ov.slbl3':'सत्यापन लंबित','ov.schg3':'12 आपको सौंपे गए',
+  'ov.slbl3':'सत्यापन लंबित','ov.schg3':'65 आपको सौंपे गए',
   'ov.slbl4':'नोटिस (2026)','ov.schg4':'▲ ₹42 लाख आरंभित',
   'ov.p0h':'वास्तविक आधार परत',
   'ov.p0p':'सत्यापित संपत्ति मास्टर डेटाबेस बनाना। AI चक्र शुरू होने से पहले राजस्व वसूली।',
@@ -900,7 +900,7 @@ mr:{
   'ov.p':'छत्रपती संभाजीनगर — N-6 विभाग — उपग्रह स्कॅन: 15 जानेवारी 2026',
   'ov.slbl1':'देखरेखीतील भूखंड','ov.schg1':'▲ 100% शहर व्याप्ती',
   'ov.slbl2':'चिन्हांकित (अलीकडील स्कॅन)','ov.schg2':'3 उच्च प्राधान्य',
-  'ov.slbl3':'सत्यापन प्रलंबित','ov.schg3':'12 आपल्याला नियुक्त',
+  'ov.slbl3':'सत्यापन प्रलंबित','ov.schg3':'65 आपल्याला नियुक्त',
   'ov.slbl4':'नोटिस (2026)','ov.schg4':'▲ ₹42 लाख सुरू केले',
   'ov.p0h':'वास्तव आधार स्तर',
   'ov.p0p':'सत्यापित मालमत्ता मास्टर डेटाबेस तयार करणे. AI चक्र सुरू होण्यापूर्वी महसूल वसुली.',
@@ -1515,6 +1515,11 @@ function triggerScan(){
   btn.disabled=true;
   const logEl=document.getElementById('slogEl');
   logEl.style.display='block';logEl.innerHTML='';
+  // Mix of HIGH + MEDIUM records to show on map
+  const scanProps=[
+    ...PROPS.filter(p=>p.priority==='HIGH').slice(0,3),
+    ...PROPS.filter(p=>p.priority==='MEDIUM').slice(0,3)
+  ];
   const lines=[
     {c:'linf',t:'[CityLens] Initiating satellite scan — Sentinel-2 S2A_MSIL2A_20260115...'},
     {c:'linf',t:'[CityLens] Cloud cover: 4.2% — clear acquisition confirmed'},
@@ -1522,12 +1527,15 @@ function triggerScan(){
     {c:'lwrn',t:'[M1] 1,247 parcels exceed change threshold → forwarding to M2-M5'},
     {c:'lwrn',t:'[M2 FootprintAI] CSM-N6-0082: +28 sqm expansion detected (IoU: 0.91)'},
     {c:'lwrn',t:'[M2 FootprintAI] CSM-N6-0095: new footprint on vacant parcel (IoU: 0.94)'},
-    {c:'lwrn',t:'[M3 HeightEstimator] CSM-N6-0082: floor count 2→3 (+3.2m shadow delta)'},
-    {c:'lwrn',t:'[M4 UseClassifier] CSM-N6-0082: Residential→Mixed-use (conf 88%)'},
+    {c:'lwrn',t:'[M3 HeightEstimator] CSM-N6-0031: floor count 2→3 (+3.2m shadow delta)'},
+    {c:'lwrn',t:'[M2 FootprintAI] CSM-N6-0113: +18 sqm side extension detected (IoU: 0.88)'},
+    {c:'lwrn',t:'[M4 UseClassifier] CSM-N6-0147: Residential→Commercial use change (conf 80%)'},
+    {c:'lwrn',t:'[M2 FootprintAI] CSM-N6-0044: +12 sqm rear footprint expansion (IoU: 0.85)'},
     {c:'linf',t:'[M5 PriorityScore] Computing weighted ensemble for 1,247 parcels...'},
     {c:'lok', t:'[M5] CSM-N6-0082 → SCORE 87/100 → HIGH → auto-notice eligible'},
     {c:'lok', t:'[M5] CSM-N6-0095 → SCORE 82/100 → HIGH → field verification assigned'},
-    {c:'lok', t:'[CityLens] Scan complete. 1,247 flagged | 3 HIGH | 4 MEDIUM | Map updated ✓'},
+    {c:'lok', t:'[M5] CSM-N6-0113 → SCORE 65/100 → MEDIUM → field check scheduled'},
+    {c:'lok', t:'[CityLens] Scan complete. 1,247 flagged | 15 HIGH | 28 MEDIUM | Map updated ✓'},
   ];
   // clear old markers/polygons
   mObjs.forEach(m=>m.remove());pObjs.forEach(p=>p.remove());
@@ -1539,8 +1547,8 @@ function triggerScan(){
       d.className=l.c;d.textContent=l.t;
       logEl.appendChild(d);logEl.scrollTop=logEl.scrollHeight;
       // add a marker/polygon as scan "discovers" each property
-      if(i>=4&&i-4<PROPS.length){
-        const p=PROPS[i-4];
+      if(i>=4&&i-4<scanProps.length){
+        const p=scanProps[i-4];
         const color=PC[p.priority];
         const pulse=p.priority==='HIGH';
         const m=L.marker([p.lat,p.lng],{icon:makeIcon(color,16,pulse)}).addTo(revMap);
@@ -1889,7 +1897,6 @@ function renderNotice(){
         <tr><td>Previous Assessment</td><td>${n.prevAssess}</td></tr>
         <tr><td>Revised Assessment (Est.)</td><td>${n.newAssess}</td></tr>
         <tr><td>Estimated Arrears</td><td>${n.arrears}</td></tr>
-        <tr><td>AI Confidence Score</td><td>${n.score}</td></tr>
         <tr><td>Field Verification</td><td>${n.field}</td></tr>
       </table>
       <p>You are hereby directed to <strong>appear before the Property Tax Assessment Office within 15 days</strong> of receipt of this notice with documentary evidence of approvals, if any. Failure to comply will result in enhanced tax assessment with penalty under applicable provisions.</p>
