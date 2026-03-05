@@ -283,6 +283,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 .chip-hi{background:rgba(192,0,0,.1);color:var(--red);border-color:rgba(192,0,0,.3)}
 .chip-me{background:rgba(176,120,0,.1);color:var(--yellow);border-color:rgba(176,120,0,.3)}
 .chip-lo{background:rgba(0,122,78,.1);color:var(--green);border-color:rgba(0,122,78,.3)}
+.chip-cl{background:rgba(90,90,90,.1);color:#556572;border-color:rgba(90,90,90,.3)}
 .srch{padding:6px 11px;border:2px solid var(--border);border-radius:6px;font-size:.78rem;
   outline:none;transition:border .2s;width:180px}
 .srch:focus{border-color:var(--sky)}
@@ -677,6 +678,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
               <span class="chip chip-hi" onclick="filterQ('HIGH',this)">🔴 High</span>
               <span class="chip chip-me" onclick="filterQ('MEDIUM',this)">🟡 Medium</span>
               <span class="chip chip-lo" onclick="filterQ('LOW',this)">🟢 Low</span>
+              <span class="chip chip-cl" onclick="filterQ('CLEARED',this)">✅ Cleared</span>
             </div>
             <input class="srch" type="text" placeholder="Search ID or location…" data-i18n-ph="q.search" oninput="searchQ(this.value)">
           </div>
