@@ -160,6 +160,18 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
 .vbtn{padding:3px 9px;background:var(--sky);color:#fff;border:none;border-radius:4px;
   font-size:.68rem;font-weight:700;cursor:pointer;transition:background .2s}
 .vbtn:hover{background:var(--navy)}
+#qpager{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+  padding:10px 14px;border-top:1px solid var(--border);font-size:.74rem;color:var(--muted)}
+.pgr-info{color:var(--muted);font-size:.73rem}
+.pgr-ctrl{display:flex;gap:3px;align-items:center}
+.pgr-sz{display:flex;align-items:center;gap:4px}
+.pgr-sz{font-size:.73rem;color:var(--muted)}
+#qpager button{border:1px solid var(--border);background:#fff;color:var(--txt);
+  border-radius:4px;padding:3px 9px;cursor:pointer;font-size:.73rem;min-width:28px;
+  transition:background .15s,color .15s}
+#qpager button:hover:not([disabled]){background:var(--sky);color:#fff;border-color:var(--sky)}
+#qpager button.pgr-act{background:var(--sky);color:#fff;border-color:var(--sky);font-weight:700}
+#qpager button[disabled]{opacity:.38;cursor:default}
 
 /* BUTTONS */
 .btn{padding:7px 16px;border:none;border-radius:var(--r);font-size:.82rem;font-weight:600;
@@ -404,7 +416,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
       <div class="ni" onclick="nav('revmap',this)"><span class="material-icons">map</span><span data-i18n="sb.revmap">RevMap</span><span class="ni-cnt" id="nBadge">3</span></div>
       <div class="ni" onclick="nav('detect',this)"><span class="material-icons">satellite_alt</span><span data-i18n="sb.detect">Change Detection</span></div>
       <div class="ni" onclick="nav('pipeline',this)"><span class="material-icons">account_tree</span><span data-i18n="sb.pipeline">AI Pipeline</span></div>
-      <div class="ni" onclick="nav('queue',this)"><span class="material-icons">list_alt</span><span data-i18n="sb.queue">Priority Queue</span><span class="ni-cnt">10</span></div>
+      <div class="ni" onclick="nav('queue',this)"><span class="material-icons">list_alt</span><span data-i18n="sb.queue">Priority Queue</span><span class="ni-cnt">65</span></div>
       <div class="ni" onclick="nav('notice',this)"><span class="material-icons">description</span><span data-i18n="sb.notice">AutoNotice</span></div>
     </nav>
     <div class="sb-foot">
@@ -673,6 +685,7 @@ td{padding:8px 12px;border-bottom:1px solid #EDF0F5;color:#333}
             <th onclick="sortQ('detected')" data-i18n="q.thdet">Detected ↕</th><th data-i18n="q.thpri">Priority</th>
             <th onclick="sortQ('score')" data-i18n="q.thscore">AI Score ↕</th><th data-i18n="q.thtax">Tax Gap</th><th data-i18n="q.thact">Action</th>
           </tr></thead><tbody id="qtable"></tbody></table></div>
+          <div id="qpager"></div>
         </div>
       </div>
 
@@ -971,6 +984,7 @@ const PC = {HIGH:'#C00000',MEDIUM:'#E8A000',LOW:'#007A4E',REVIEW:'#007EB5',CLEAR
 const PB = {HIGH:'b-high',MEDIUM:'b-med',LOW:'b-low',REVIEW:'b-done',CLEARED:'b-done'};
 
 const PROPS = [
+  // ═══ HIGH (15) ═══
   {id:'CSM-N6-0082',name:'Near MGM Rukmani Auditorium',lat:19.8770,lng:75.3445,
    priority:'HIGH',score:87,tax:'₹5,800',type:'Floor Addition + Use Change',detected:'15 Jan 2026',owner:'Ramesh Patil',
    poly:[[19.8768,75.3443],[19.8772,75.3443],[19.8772,75.3448],[19.8768,75.3448]],
@@ -995,6 +1009,91 @@ const PROPS = [
    tl:[{d:'Dec 2024',e:'Large hoarding on residential plot'},
        {d:'10 Jan 2026',e:'Flagged HIGH — commercial use on residential'},
        {d:'Pending',e:'Field verification pending'}]},
+  {id:'CSM-N1-0034',name:'N-1 Sector, Garkheda Road',lat:19.8818,lng:75.3395,
+   priority:'HIGH',score:84,tax:'₹7,200',type:'Multi-floor Addition (G+1 to G+3)',detected:'08 Jan 2026',owner:'Suresh Jadhav',
+   poly:[[19.8816,75.3393],[19.8820,75.3393],[19.8820,75.3398],[19.8816,75.3398]],
+   scores:[{l:'ChangeDetect',v:91},{l:'FootprintAI',v:88},{l:'HeightEstimator',v:86},{l:'UseClassifier',v:79}],
+   tl:[{d:'Mar 2023',e:'Baseline: G+1 residential'},
+       {d:'Jul 2025',e:'Shadow delta indicates 2 additional floors'},
+       {d:'08 Jan 2026',e:'Flagged HIGH — G+3 unauthorized'}]},
+  {id:'CSM-N1-0056',name:'N-1 Commercial Zone, Plot 56',lat:19.8822,lng:75.3410,
+   priority:'HIGH',score:81,tax:'₹6,800',type:'Unauthorized Commercial Extension',detected:'10 Jan 2026',owner:'M/s. Sunrise Builders',
+   poly:[[19.8820,75.3408],[19.8824,75.3408],[19.8824,75.3413],[19.8820,75.3413]],
+   scores:[{l:'ChangeDetect',v:89},{l:'FootprintAI',v:85},{l:'HeightEstimator',v:77},{l:'UseClassifier',v:83}],
+   tl:[{d:'Feb 2022',e:'Registered commercial plot 200 sqm'},
+       {d:'Sep 2025',e:'+55 sqm unauthorized extension'},
+       {d:'10 Jan 2026',e:'Flagged HIGH (Score 81)'}]},
+  {id:'CSM-N2-0017',name:'N-2 Residential Layout, Plot 17',lat:19.8802,lng:75.3428,
+   priority:'HIGH',score:89,tax:'₹9,400',type:'New Construction on Vacant Land',detected:'07 Jan 2026',owner:'Vikas Chavan',
+   poly:[[19.8800,75.3426],[19.8804,75.3426],[19.8804,75.3431],[19.8800,75.3431]],
+   scores:[{l:'ChangeDetect',v:97},{l:'FootprintAI',v:92},{l:'HeightEstimator',v:88},{l:'UseClassifier',v:84}],
+   tl:[{d:'2022',e:'Vacant plot, no structure'},
+       {d:'Apr 2025',e:'Foundation works detected by satellite'},
+       {d:'07 Jan 2026',e:'Full G+2 structure — HIGH priority'}]},
+  {id:'CSM-N2-0078',name:'N-2 Sector B, Plot 78',lat:19.8797,lng:75.3445,
+   priority:'HIGH',score:76,tax:'₹5,100',type:'Demolition + Unauthorized Rebuild',detected:'12 Jan 2026',owner:'Rajesh Bhagat',
+   poly:[[19.8795,75.3443],[19.8799,75.3443],[19.8799,75.3448],[19.8795,75.3448]],
+   scores:[{l:'ChangeDetect',v:88},{l:'FootprintAI',v:82},{l:'HeightEstimator',v:79},{l:'UseClassifier',v:75}],
+   tl:[{d:'Jan 2024',e:'1-floor structure, 95 sqm'},
+       {d:'Jun 2025',e:'Demolition + new construction started'},
+       {d:'12 Jan 2026',e:'Flagged HIGH — rebuilt without permit'}]},
+  {id:'CSM-N3-0023',name:'N-3 Sector East, Plot 23',lat:19.8788,lng:75.3462,
+   priority:'HIGH',score:91,tax:'₹11,600',type:'Unauthorized Extra Floor + Setback Violation',detected:'06 Jan 2026',owner:'Aurangabad Developers Pvt. Ltd.',
+   poly:[[19.8786,75.3460],[19.8790,75.3460],[19.8790,75.3465],[19.8786,75.3465]],
+   scores:[{l:'ChangeDetect',v:95},{l:'FootprintAI',v:93},{l:'HeightEstimator',v:91},{l:'UseClassifier',v:87}],
+   tl:[{d:'2021',e:'Approved G+2 commercial'},
+       {d:'Aug 2025',e:'G+4 detected — 2 floors unauthorized + setback violation'},
+       {d:'06 Jan 2026',e:'Flagged HIGH (Score 91) — field verification ordered'}]},
+  {id:'CSM-N3-0045',name:'N-3 Commercial Strip, Plot 45',lat:19.8782,lng:75.3475,
+   priority:'HIGH',score:78,tax:'₹6,300',type:'Floor Addition + Use Change',detected:'12 Jan 2026',owner:'Prakash Thakur',
+   poly:[[19.8780,75.3473],[19.8784,75.3473],[19.8784,75.3478],[19.8780,75.3478]],
+   scores:[{l:'ChangeDetect',v:87},{l:'FootprintAI',v:82},{l:'HeightEstimator',v:75},{l:'UseClassifier',v:84}],
+   tl:[{d:'2023',e:'Residential G+1, 110 sqm'},
+       {d:'Nov 2025',e:'Additional floor + commercial conversion detected'},
+       {d:'12 Jan 2026',e:'Flagged HIGH'}]},
+  {id:'CSM-N4-0012',name:'N-4 CIDCO Layout, Plot 12',lat:19.8775,lng:75.3490,
+   priority:'HIGH',score:85,tax:'₹8,200',type:'New Structure on Vacant Plot',detected:'09 Jan 2026',owner:'Shiva Enterprises',
+   poly:[[19.8773,75.3488],[19.8777,75.3488],[19.8777,75.3493],[19.8773,75.3493]],
+   scores:[{l:'ChangeDetect',v:94},{l:'FootprintAI',v:90},{l:'HeightEstimator',v:83},{l:'UseClassifier',v:81}],
+   tl:[{d:'2022',e:'Designated open plot'},
+       {d:'May 2025',e:'Construction commenced without approval'},
+       {d:'09 Jan 2026',e:'Flagged HIGH — unauthorized structure'}]},
+  {id:'CSM-N5-0033',name:'N-5 Residential, Plot 33',lat:19.8758,lng:75.3498,
+   priority:'HIGH',score:83,tax:'₹8,900',type:'Unauthorized Commercial on Residential',detected:'11 Jan 2026',owner:'Santosh Wagh',
+   poly:[[19.8756,75.3496],[19.8760,75.3496],[19.8760,75.3501],[19.8756,75.3501]],
+   scores:[{l:'ChangeDetect',v:90},{l:'FootprintAI',v:87},{l:'HeightEstimator',v:80},{l:'UseClassifier',v:91}],
+   tl:[{d:'2021',e:'Residential, 140 sqm'},
+       {d:'Oct 2025',e:'Commercial activity + hoarding detected'},
+       {d:'11 Jan 2026',e:'Flagged HIGH — use violation'}]},
+  {id:'CSM-N7-0014',name:'N-7 Area, Cidco Colony',lat:19.8735,lng:75.3468,
+   priority:'HIGH',score:86,tax:'₹9,100',type:'Terrace Enclosure + Extra Floor',detected:'08 Jan 2026',owner:'Girish Joshi',
+   poly:[[19.8733,75.3466],[19.8737,75.3466],[19.8737,75.3471],[19.8733,75.3471]],
+   scores:[{l:'ChangeDetect',v:92},{l:'FootprintAI',v:89},{l:'HeightEstimator',v:88},{l:'UseClassifier',v:78}],
+   tl:[{d:'2022',e:'G+2 residential approved'},
+       {d:'Sep 2025',e:'Terrace enclosed + additional floor detected'},
+       {d:'08 Jan 2026',e:'Flagged HIGH'}]},
+  {id:'CSM-N8-0028',name:'N-8 Plot 28, Near Bus Stand',lat:19.8722,lng:75.3445,
+   priority:'HIGH',score:74,tax:'₹4,800',type:'Illegal Boundary Extension + Encroachment',detected:'14 Jan 2026',owner:'Hemant Naik',
+   poly:[[19.8720,75.3443],[19.8724,75.3443],[19.8724,75.3448],[19.8720,75.3448]],
+   scores:[{l:'ChangeDetect',v:86},{l:'FootprintAI',v:81},{l:'HeightEstimator',v:72},{l:'UseClassifier',v:77}],
+   tl:[{d:'2023',e:'Commercial plot, 180 sqm'},
+       {d:'Aug 2025',e:'+40 sqm boundary encroachment onto municipal land'},
+       {d:'14 Jan 2026',e:'Flagged HIGH — encroachment verified'}]},
+  {id:'CSM-N9-0041',name:'N-9 Sector, Plot 41',lat:19.8730,lng:75.3420,
+   priority:'HIGH',score:79,tax:'₹7,400',type:'Multi-floor Unauthorized Addition',detected:'13 Jan 2026',owner:'Tushar Londhe',
+   poly:[[19.8728,75.3418],[19.8732,75.3418],[19.8732,75.3423],[19.8728,75.3423]],
+   scores:[{l:'ChangeDetect',v:88},{l:'FootprintAI',v:84},{l:'HeightEstimator',v:82},{l:'UseClassifier',v:76}],
+   tl:[{d:'2022',e:'G+1 residential'},
+       {d:'Jul 2025',e:'G+3 — two unauthorized floors'},
+       {d:'13 Jan 2026',e:'Flagged HIGH'}]},
+  {id:'CSM-N10-0019x',name:'N-10 Zone, Plot 19',lat:19.8742,lng:75.3395,
+   priority:'HIGH',score:77,tax:'₹5,600',type:'Unauthorized Workshop on Residential Plot',detected:'15 Jan 2026',owner:'Rajendra Mhatre',
+   poly:[[19.8740,75.3393],[19.8744,75.3393],[19.8744,75.3398],[19.8740,75.3398]],
+   scores:[{l:'ChangeDetect',v:85},{l:'FootprintAI',v:80},{l:'HeightEstimator',v:74},{l:'UseClassifier',v:88}],
+   tl:[{d:'2023',e:'Residential plot, no structure'},
+       {d:'Jun 2025',e:'Workshop shed constructed'},
+       {d:'15 Jan 2026',e:'Flagged HIGH — industrial use on residential'}]},
+  // ═══ MEDIUM (28) ═══
   {id:'CSM-N6-0113',name:'N-6 Residential Block C',lat:19.8773,lng:75.3424,
    priority:'MEDIUM',score:65,tax:'₹3,200',type:'Footprint Expansion +18 sqm',detected:'20 Jan 2026',owner:'Anil Khedkar',
    poly:[[19.8771,75.3422],[19.8775,75.3422],[19.8775,75.3427],[19.8771,75.3427]],
@@ -1023,24 +1122,309 @@ const PROPS = [
    tl:[{d:'Jul 2023',e:'Single 200 sqm commercial property'},
        {d:'Oct 2025',e:'3 distinct units detected — subdivision'},
        {d:'22 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N1-0089',name:'N-1 Garkheda, Plot 89',lat:19.8815,lng:75.3402,
+   priority:'MEDIUM',score:67,tax:'₹3,500',type:'Side Extension + Setback Violation',detected:'18 Jan 2026',owner:'Kavita Shinde',
+   poly:[[19.8813,75.3400],[19.8817,75.3400],[19.8817,75.3405],[19.8813,75.3405]],
+   scores:[{l:'ChangeDetect',v:82},{l:'FootprintAI',v:79},{l:'HeightEstimator',v:65},{l:'UseClassifier',v:68}],
+   tl:[{d:'2022',e:'100 sqm residential'},
+       {d:'Oct 2025',e:'+14 sqm side extension into setback'},
+       {d:'18 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N1-0112',name:'N-1 Sector South, Plot 112',lat:19.8808,lng:75.3415,
+   priority:'MEDIUM',score:54,tax:'₹2,900',type:'Residential to Commercial Use',detected:'22 Jan 2026',owner:'Manoj Bapat',
+   poly:[[19.8806,75.3413],[19.8810,75.3413],[19.8810,75.3418],[19.8806,75.3418]],
+   scores:[{l:'ChangeDetect',v:70},{l:'FootprintAI',v:65},{l:'HeightEstimator',v:52},{l:'UseClassifier',v:78}],
+   tl:[{d:'2021',e:'Residential property'},
+       {d:'Nov 2025',e:'Signage + commercial activity detected'},
+       {d:'22 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N2-0034',name:'N-2 Layout, Plot 34',lat:19.8803,lng:75.3432,
+   priority:'MEDIUM',score:59,tax:'₹2,600',type:'Footprint Expansion +22 sqm',detected:'20 Jan 2026',owner:'Geeta Gaikwad',
+   poly:[[19.8801,75.3430],[19.8805,75.3430],[19.8805,75.3435],[19.8801,75.3435]],
+   scores:[{l:'ChangeDetect',v:76},{l:'FootprintAI',v:72},{l:'HeightEstimator',v:58},{l:'UseClassifier',v:62}],
+   tl:[{d:'2022',e:'Registered: 90 sqm'},
+       {d:'Aug 2025',e:'+22 sqm front extension'},
+       {d:'20 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N2-0056',name:'N-2 Sector B, Plot 56',lat:19.8798,lng:75.3450,
+   priority:'MEDIUM',score:62,tax:'₹3,400',type:'Unauthorized Parking Structure',detected:'22 Jan 2026',owner:'Rupali More',
+   poly:[[19.8796,75.3448],[19.8800,75.3448],[19.8800,75.3453],[19.8796,75.3453]],
+   scores:[{l:'ChangeDetect',v:80},{l:'FootprintAI',v:74},{l:'HeightEstimator',v:60},{l:'UseClassifier',v:67}],
+   tl:[{d:'2023',e:'Open yard, no structures'},
+       {d:'Sep 2025',e:'Covered parking shed 45 sqm detected'},
+       {d:'22 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N3-0067',name:'N-3 East, Plot 67',lat:19.8790,lng:75.3462,
+   priority:'MEDIUM',score:57,tax:'₹2,800',type:'Basement Conversion to Commercial',detected:'24 Jan 2026',owner:'Pooja Deshpande',
+   poly:[[19.8788,75.3460],[19.8792,75.3460],[19.8792,75.3465],[19.8788,75.3465]],
+   scores:[{l:'ChangeDetect',v:71},{l:'FootprintAI',v:66},{l:'HeightEstimator',v:54},{l:'UseClassifier',v:82}],
+   tl:[{d:'2021',e:'Residential basement approved for storage'},
+       {d:'Dec 2025',e:'Commercial activity detected in basement'},
+       {d:'24 Jan 2026',e:'Flagged MEDIUM — use violation'}]},
+  {id:'CSM-N3-0089',name:'N-3 Main Road, Plot 89',lat:19.8785,lng:75.3478,
+   priority:'MEDIUM',score:64,tax:'₹3,100',type:'Unauthorized Hoarding',detected:'21 Jan 2026',owner:'Nitin Munde',
+   poly:[[19.8783,75.3476],[19.8787,75.3476],[19.8787,75.3481],[19.8783,75.3481]],
+   scores:[{l:'ChangeDetect',v:83},{l:'FootprintAI',v:70},{l:'HeightEstimator',v:58},{l:'UseClassifier',v:85}],
+   tl:[{d:'2022',e:'Residential plot'},
+       {d:'Nov 2025',e:'Large advertising hoarding installed'},
+       {d:'21 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N4-0034',name:'N-4 Colony, Plot 34',lat:19.8778,lng:75.3485,
+   priority:'MEDIUM',score:60,tax:'₹2,500',type:'Rear Extension + Encroachment',detected:'24 Jan 2026',owner:'Archana Shirke',
+   poly:[[19.8776,75.3483],[19.8780,75.3483],[19.8780,75.3488],[19.8776,75.3488]],
+   scores:[{l:'ChangeDetect',v:78},{l:'FootprintAI',v:72},{l:'HeightEstimator',v:57},{l:'UseClassifier',v:61}],
+   tl:[{d:'2022',e:'Residential 100 sqm'},
+       {d:'Oct 2025',e:'+16 sqm rear extension detected'},
+       {d:'24 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N4-0056',name:'N-4 CIDCO, Plot 56',lat:19.8771,lng:75.3495,
+   priority:'MEDIUM',score:56,tax:'₹2,400',type:'Footprint Expansion +15 sqm',detected:'25 Jan 2026',owner:'Dilip Kamble',
+   poly:[[19.8769,75.3493],[19.8773,75.3493],[19.8773,75.3498],[19.8769,75.3498]],
+   scores:[{l:'ChangeDetect',v:74},{l:'FootprintAI',v:70},{l:'HeightEstimator',v:55},{l:'UseClassifier',v:60}],
+   tl:[{d:'2023',e:'85 sqm residential'},
+       {d:'Nov 2025',e:'+15 sqm side addition'},
+       {d:'25 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N5-0045',name:'N-5 Sector, Plot 45',lat:19.8762,lng:75.3505,
+   priority:'MEDIUM',score:62,tax:'₹3,600',type:'Commercial to Industrial Conversion',detected:'22 Jan 2026',owner:'Varsha Pawar',
+   poly:[[19.8760,75.3503],[19.8764,75.3503],[19.8764,75.3508],[19.8760,75.3508]],
+   scores:[{l:'ChangeDetect',v:80},{l:'FootprintAI',v:75},{l:'HeightEstimator',v:59},{l:'UseClassifier',v:88}],
+   tl:[{d:'2022',e:'Commercial plot, light retail'},
+       {d:'Sep 2025',e:'Industrial machinery signatures detected'},
+       {d:'22 Jan 2026',e:'Flagged MEDIUM — use conversion'}]},
+  {id:'CSM-N5-0067',name:'N-5 East, Plot 67',lat:19.8755,lng:75.3488,
+   priority:'MEDIUM',score:59,tax:'₹2,700',type:'Side Extension + Setback Violation',detected:'24 Jan 2026',owner:'Sneha Patil',
+   poly:[[19.8753,75.3486],[19.8757,75.3486],[19.8757,75.3491],[19.8753,75.3491]],
+   scores:[{l:'ChangeDetect',v:75},{l:'FootprintAI',v:71},{l:'HeightEstimator',v:56},{l:'UseClassifier',v:63}],
+   tl:[{d:'2022',e:'Residential 115 sqm'},
+       {d:'Oct 2025',e:'+18 sqm side extension into setback zone'},
+       {d:'24 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N6-0128',name:'N-6 Inner Road, Plot 128',lat:19.8763,lng:75.3420,
+   priority:'MEDIUM',score:66,tax:'₹3,300',type:'Unauthorized Subdivision',detected:'23 Jan 2026',owner:'Amita Sonar',
+   poly:[[19.8761,75.3418],[19.8765,75.3418],[19.8765,75.3423],[19.8761,75.3423]],
+   scores:[{l:'ChangeDetect',v:82},{l:'FootprintAI',v:78},{l:'HeightEstimator',v:63},{l:'UseClassifier',v:71}],
+   tl:[{d:'2023',e:'Single commercial unit 180 sqm'},
+       {d:'Nov 2025',e:'4 separate units detected — illegal subdivision'},
+       {d:'23 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N6-0156',name:'N-6 Near Water Tank, Plot 156',lat:19.8770,lng:75.3435,
+   priority:'MEDIUM',score:61,tax:'₹2,900',type:'Rear Footprint Expansion',detected:'25 Jan 2026',owner:'Swati Patane',
+   poly:[[19.8768,75.3433],[19.8772,75.3433],[19.8772,75.3438],[19.8768,75.3438]],
+   scores:[{l:'ChangeDetect',v:79},{l:'FootprintAI',v:73},{l:'HeightEstimator',v:58},{l:'UseClassifier',v:65}],
+   tl:[{d:'2022',e:'90 sqm residential'},
+       {d:'Sep 2025',e:'+11 sqm rear kitchen extension'},
+       {d:'25 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N7-0023',name:'N-7 Colony, Plot 23',lat:19.8738,lng:75.3475,
+   priority:'MEDIUM',score:63,tax:'₹3,200',type:'Unauthorized Structure on Terrace',detected:'22 Jan 2026',owner:'Usha Shelar',
+   poly:[[19.8736,75.3473],[19.8740,75.3473],[19.8740,75.3478],[19.8736,75.3478]],
+   scores:[{l:'ChangeDetect',v:81},{l:'FootprintAI',v:74},{l:'HeightEstimator',v:69},{l:'UseClassifier',v:66}],
+   tl:[{d:'2022',e:'G+2 approved'},
+       {d:'Nov 2025',e:'Terrace room +30 sqm detected'},
+       {d:'22 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N7-0045',name:'N-7 Sector, Plot 45',lat:19.8732,lng:75.3462,
+   priority:'MEDIUM',score:55,tax:'₹2,200',type:'Residential to Commercial Use',detected:'26 Jan 2026',owner:'Madhuri Bendre',
+   poly:[[19.8730,75.3460],[19.8734,75.3460],[19.8734,75.3465],[19.8730,75.3465]],
+   scores:[{l:'ChangeDetect',v:72},{l:'FootprintAI',v:66},{l:'HeightEstimator',v:51},{l:'UseClassifier',v:79}],
+   tl:[{d:'2021',e:'Residential G+1'},
+       {d:'Dec 2025',e:'Shop + signage on ground floor detected'},
+       {d:'26 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N7-0067',name:'N-7 Main Road, Plot 67',lat:19.8725,lng:75.3450,
+   priority:'MEDIUM',score:68,tax:'₹4,200',type:'Commercial Extension +30 sqm',detected:'20 Jan 2026',owner:'Vikram Suryavanshi',
+   poly:[[19.8723,75.3448],[19.8727,75.3448],[19.8727,75.3453],[19.8723,75.3453]],
+   scores:[{l:'ChangeDetect',v:85},{l:'FootprintAI',v:80},{l:'HeightEstimator',v:65},{l:'UseClassifier',v:70}],
+   tl:[{d:'2022',e:'Commercial 150 sqm'},
+       {d:'Sep 2025',e:'+30 sqm unauthorized side extension'},
+       {d:'20 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N8-0012',name:'N-8 Colony East, Plot 12',lat:19.8718,lng:75.3438,
+   priority:'MEDIUM',score:57,tax:'₹2,600',type:'Unauthorized Boundary Wall + Encroachment',detected:'26 Jan 2026',owner:'Deepa Kale',
+   poly:[[19.8716,75.3436],[19.8720,75.3436],[19.8720,75.3441],[19.8716,75.3441]],
+   scores:[{l:'ChangeDetect',v:73},{l:'FootprintAI',v:68},{l:'HeightEstimator',v:55},{l:'UseClassifier',v:62}],
+   tl:[{d:'2023',e:'Residential plot with small structure'},
+       {d:'Nov 2025',e:'Boundary wall extended 3m onto public road'},
+       {d:'26 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N8-0034',name:'N-8 Sector B, Plot 34',lat:19.8722,lng:75.3425,
+   priority:'MEDIUM',score:60,tax:'₹3,000',type:'Side Extension + Roof Enclosure',detected:'24 Jan 2026',owner:'Chandrakant Fulari',
+   poly:[[19.8720,75.3423],[19.8724,75.3423],[19.8724,75.3428],[19.8720,75.3428]],
+   scores:[{l:'ChangeDetect',v:77},{l:'FootprintAI',v:73},{l:'HeightEstimator',v:62},{l:'UseClassifier',v:65}],
+   tl:[{d:'2022',e:'85 sqm residential'},
+       {d:'Oct 2025',e:'Side room + roof enclosed — +22 sqm'},
+       {d:'24 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N8-0056',name:'N-8 Plot 56, Near School',lat:19.8728,lng:75.3415,
+   priority:'MEDIUM',score:55,tax:'₹2,300',type:'Footprint Expansion +10 sqm',detected:'28 Jan 2026',owner:'Rekha Nikam',
+   poly:[[19.8726,75.3413],[19.8730,75.3413],[19.8730,75.3418],[19.8726,75.3418]],
+   scores:[{l:'ChangeDetect',v:72},{l:'FootprintAI',v:68},{l:'HeightEstimator',v:53},{l:'UseClassifier',v:59}],
+   tl:[{d:'2023',e:'75 sqm residential'},
+       {d:'Nov 2025',e:'+10 sqm small extension'},
+       {d:'28 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N9-0023',name:'N-9 Zone, Plot 23',lat:19.8735,lng:75.3408,
+   priority:'MEDIUM',score:64,tax:'₹3,700',type:'Unauthorized Hoarding + Use Change',detected:'22 Jan 2026',owner:'Sunil Desai',
+   poly:[[19.8733,75.3406],[19.8737,75.3406],[19.8737,75.3411],[19.8733,75.3411]],
+   scores:[{l:'ChangeDetect',v:82},{l:'FootprintAI',v:76},{l:'HeightEstimator',v:60},{l:'UseClassifier',v:86}],
+   tl:[{d:'2022',e:'Residential plot'},
+       {d:'Nov 2025',e:'Hoarding + commercial use detected'},
+       {d:'22 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N9-0056',name:'N-9 Sector A, Plot 56',lat:19.8740,lng:75.3398,
+   priority:'MEDIUM',score:58,tax:'₹2,800',type:'Rear Extension + Setback Violation',detected:'25 Jan 2026',owner:'Nandita Parab',
+   poly:[[19.8738,75.3396],[19.8742,75.3396],[19.8742,75.3401],[19.8738,75.3401]],
+   scores:[{l:'ChangeDetect',v:75},{l:'FootprintAI',v:70},{l:'HeightEstimator',v:56},{l:'UseClassifier',v:62}],
+   tl:[{d:'2023',e:'90 sqm residential'},
+       {d:'Oct 2025',e:'+13 sqm rear extension violating setback'},
+       {d:'25 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N9-0078',name:'N-9 Inner Area, Plot 78',lat:19.8748,lng:75.3388,
+   priority:'MEDIUM',score:62,tax:'₹3,100',type:'Residential to Commercial',detected:'23 Jan 2026',owner:'Bharat Properties',
+   poly:[[19.8746,75.3386],[19.8750,75.3386],[19.8750,75.3391],[19.8746,75.3391]],
+   scores:[{l:'ChangeDetect',v:79},{l:'FootprintAI',v:74},{l:'HeightEstimator',v:58},{l:'UseClassifier',v:82}],
+   tl:[{d:'2021',e:'Residential use'},
+       {d:'Dec 2025',e:'Commercial goods storage detected'},
+       {d:'23 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N10-0034',name:'N-10 Layout, Plot 34',lat:19.8752,lng:75.3378,
+   priority:'MEDIUM',score:56,tax:'₹2,500',type:'Unauthorized Parking Shed',detected:'27 Jan 2026',owner:'M/s. Jyoti Constructions',
+   poly:[[19.8750,75.3376],[19.8754,75.3376],[19.8754,75.3381],[19.8750,75.3381]],
+   scores:[{l:'ChangeDetect',v:74},{l:'FootprintAI',v:68},{l:'HeightEstimator',v:55},{l:'UseClassifier',v:61}],
+   tl:[{d:'2022',e:'Open yard'},
+       {d:'Oct 2025',e:'20-vehicle covered parking shed — 80 sqm'},
+       {d:'27 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N10-0056',name:'N-10 Sector South, Plot 56',lat:19.8758,lng:75.3370,
+   priority:'MEDIUM',score:60,tax:'₹2,900',type:'Side Extension + Setback Violation',detected:'25 Jan 2026',owner:'Anita Gosavi',
+   poly:[[19.8756,75.3368],[19.8760,75.3368],[19.8760,75.3373],[19.8756,75.3373]],
+   scores:[{l:'ChangeDetect',v:77},{l:'FootprintAI',v:72},{l:'HeightEstimator',v:58},{l:'UseClassifier',v:63}],
+   tl:[{d:'2023',e:'100 sqm residential'},
+       {d:'Nov 2025',e:'+12 sqm side room in setback'},
+       {d:'25 Jan 2026',e:'Flagged MEDIUM'}]},
+  {id:'CSM-N10-0078',name:'N-10 Zone West, Plot 78',lat:19.8765,lng:75.3382,
+   priority:'MEDIUM',score:57,tax:'₹2,600',type:'Footprint Expansion +20 sqm',detected:'28 Jan 2026',owner:'Vikram Suryavanshi',
+   poly:[[19.8763,75.3380],[19.8767,75.3380],[19.8767,75.3385],[19.8763,75.3385]],
+   scores:[{l:'ChangeDetect',v:74},{l:'FootprintAI',v:69},{l:'HeightEstimator',v:56},{l:'UseClassifier',v:61}],
+   tl:[{d:'2023',e:'Registered 95 sqm'},
+       {d:'Nov 2025',e:'+20 sqm ground floor extension'},
+       {d:'28 Jan 2026',e:'Flagged MEDIUM'}]},
+  // ═══ LOW (14) ═══
   {id:'CSM-N6-0062',name:'Near Rukmani Auditorium, Plot 62',lat:19.8765,lng:75.3460,
    priority:'LOW',score:31,tax:'₹900',type:'Minor Canopy Extension',detected:'25 Jan 2026',owner:'Vinod Salunkhe',
    poly:[[19.8763,75.3458],[19.8767,75.3458],[19.8767,75.3463],[19.8763,75.3463]],
    scores:[{l:'ChangeDetect',v:55},{l:'FootprintAI',v:42},{l:'HeightEstimator',v:38},{l:'UseClassifier',v:50}],
    tl:[{d:'Jan 2026',e:'Minor canopy extension +4 sqm'},
        {d:'25 Jan 2026',e:'Flagged LOW priority'}]},
+  {id:'CSM-N1-0145',name:'N-1 Sector, Plot 145',lat:19.8822,lng:75.3405,
+   priority:'LOW',score:34,tax:'₹1,100',type:'Minor Canopy Extension',detected:'25 Jan 2026',owner:'Pooja Deshpande',
+   poly:[[19.8820,75.3403],[19.8824,75.3403],[19.8824,75.3408],[19.8820,75.3408]],
+   scores:[{l:'ChangeDetect',v:58},{l:'FootprintAI',v:45},{l:'HeightEstimator',v:40},{l:'UseClassifier',v:52}],
+   tl:[{d:'Jan 2026',e:'+5 sqm canopy over entrance'},
+       {d:'25 Jan 2026',e:'Flagged LOW — minor extension'}]},
+  {id:'CSM-N2-0098',name:'N-2 Layout, Plot 98',lat:19.8808,lng:75.3440,
+   priority:'LOW',score:38,tax:'₹1,400',type:'Small Shed on Open Plot',detected:'26 Jan 2026',owner:'Geeta Gaikwad',
+   poly:[[19.8806,75.3438],[19.8810,75.3438],[19.8810,75.3443],[19.8806,75.3443]],
+   scores:[{l:'ChangeDetect',v:60},{l:'FootprintAI',v:48},{l:'HeightEstimator',v:42},{l:'UseClassifier',v:55}],
+   tl:[{d:'Jan 2026',e:'8 sqm storage shed on vacant portion'},
+       {d:'26 Jan 2026',e:'Flagged LOW — minimal risk'}]},
+  {id:'CSM-N3-0112',name:'N-3 East, Plot 112',lat:19.8793,lng:75.3470,
+   priority:'LOW',score:36,tax:'₹1,200',type:'Minor Terrace Parapet Addition',detected:'27 Jan 2026',owner:'Kavita Shinde',
+   poly:[[19.8791,75.3468],[19.8795,75.3468],[19.8795,75.3473],[19.8791,75.3473]],
+   scores:[{l:'ChangeDetect',v:57},{l:'FootprintAI',v:44},{l:'HeightEstimator',v:46},{l:'UseClassifier',v:48}],
+   tl:[{d:'Jan 2026',e:'Parapet height raised by 0.5m'},
+       {d:'27 Jan 2026',e:'Flagged LOW — minor modification'}]},
+  {id:'CSM-N4-0078',name:'N-4 Colony, Plot 78',lat:19.8780,lng:75.3500,
+   priority:'LOW',score:29,tax:'₹800',type:'Minor Canopy + Gate Modification',detected:'28 Jan 2026',owner:'Archana Shirke',
+   poly:[[19.8778,75.3498],[19.8782,75.3498],[19.8782,75.3503],[19.8778,75.3503]],
+   scores:[{l:'ChangeDetect',v:51},{l:'FootprintAI',v:40},{l:'HeightEstimator',v:35},{l:'UseClassifier',v:47}],
+   tl:[{d:'Jan 2026',e:'Gate + small awning modification'},
+       {d:'28 Jan 2026',e:'Flagged LOW'}]},
+  {id:'CSM-N5-0089',name:'N-5 Zone, Plot 89',lat:19.8765,lng:75.3508,
+   priority:'LOW',score:33,tax:'₹1,000',type:'Small Extension on Terrace',detected:'28 Jan 2026',owner:'Sneha Patil',
+   poly:[[19.8763,75.3506],[19.8767,75.3506],[19.8767,75.3511],[19.8763,75.3511]],
+   scores:[{l:'ChangeDetect',v:55},{l:'FootprintAI',v:43},{l:'HeightEstimator',v:41},{l:'UseClassifier',v:50}],
+   tl:[{d:'Jan 2026',e:'6 sqm terrace enclosure'},
+       {d:'28 Jan 2026',e:'Flagged LOW — low confidence'}]},
+  {id:'CSM-N6-0178',name:'N-6 Zone, Plot 178',lat:19.8745,lng:75.3465,
+   priority:'LOW',score:28,tax:'₹700',type:'Minor Setback Planter Addition',detected:'29 Jan 2026',owner:'Ravi Thorat',
+   poly:[[19.8743,75.3463],[19.8747,75.3463],[19.8747,75.3468],[19.8743,75.3468]],
+   scores:[{l:'ChangeDetect',v:50},{l:'FootprintAI',v:38},{l:'HeightEstimator',v:33},{l:'UseClassifier',v:44}],
+   tl:[{d:'Jan 2026',e:'Decorative planter box in setback area'},
+       {d:'29 Jan 2026',e:'Flagged LOW — likely permitted'}]},
+  {id:'CSM-N7-0089',name:'N-7 Colony, Plot 89',lat:19.8728,lng:75.3480,
+   priority:'LOW',score:35,tax:'₹1,100',type:'Small Shed Addition',detected:'27 Jan 2026',owner:'Usha Shelar',
+   poly:[[19.8726,75.3478],[19.8730,75.3478],[19.8730,75.3483],[19.8726,75.3483]],
+   scores:[{l:'ChangeDetect',v:58},{l:'FootprintAI',v:46},{l:'HeightEstimator',v:39},{l:'UseClassifier',v:52}],
+   tl:[{d:'Jan 2026',e:'10 sqm utility shed in rear yard'},
+       {d:'27 Jan 2026',e:'Flagged LOW'}]},
+  {id:'CSM-N8-0067',name:'N-8 Colony, Plot 67',lat:19.8715,lng:75.3432,
+   priority:'LOW',score:32,tax:'₹900',type:'Minor Canopy on Ground Floor',detected:'30 Jan 2026',owner:'Deepa Kale',
+   poly:[[19.8713,75.3430],[19.8717,75.3430],[19.8717,75.3435],[19.8713,75.3435]],
+   scores:[{l:'ChangeDetect',v:54},{l:'FootprintAI',v:42},{l:'HeightEstimator',v:37},{l:'UseClassifier',v:48}],
+   tl:[{d:'Jan 2026',e:'Canopy extension over shop entrance'},
+       {d:'30 Jan 2026',e:'Flagged LOW — minimal impact'}]},
+  {id:'CSM-N8-0089',name:'N-8 Sector, Plot 89',lat:19.8720,lng:75.3418,
+   priority:'LOW',score:30,tax:'₹800',type:'Small Garden Structure',detected:'31 Jan 2026',owner:'Rekha Nikam',
+   poly:[[19.8718,75.3416],[19.8722,75.3416],[19.8722,75.3421],[19.8718,75.3421]],
+   scores:[{l:'ChangeDetect',v:52},{l:'FootprintAI',v:40},{l:'HeightEstimator',v:35},{l:'UseClassifier',v:46}],
+   tl:[{d:'Jan 2026',e:'Garden gazebo 9 sqm detected'},
+       {d:'31 Jan 2026',e:'Flagged LOW'}]},
+  {id:'CSM-N9-0089',name:'N-9 Zone, Plot 89',lat:19.8742,lng:75.3405,
+   priority:'LOW',score:37,tax:'₹1,200',type:'Side Canopy Extension',detected:'29 Jan 2026',owner:'Sunil Desai',
+   poly:[[19.8740,75.3403],[19.8744,75.3403],[19.8744,75.3408],[19.8740,75.3408]],
+   scores:[{l:'ChangeDetect',v:59},{l:'FootprintAI',v:47},{l:'HeightEstimator',v:42},{l:'UseClassifier',v:53}],
+   tl:[{d:'Jan 2026',e:'+7 sqm side canopy'},
+       {d:'29 Jan 2026',e:'Flagged LOW'}]},
+  {id:'CSM-N9-0101',name:'N-9 Area, Plot 101',lat:19.8748,lng:75.3392,
+   priority:'LOW',score:26,tax:'₹600',type:'Minor Roof Extension',detected:'01 Feb 2026',owner:'Nandita Parab',
+   poly:[[19.8746,75.3390],[19.8750,75.3390],[19.8750,75.3395],[19.8746,75.3395]],
+   scores:[{l:'ChangeDetect',v:48},{l:'FootprintAI',v:37},{l:'HeightEstimator',v:32},{l:'UseClassifier',v:42}],
+   tl:[{d:'Jan 2026',e:'Minor roof parapet modification'},
+       {d:'01 Feb 2026',e:'Flagged LOW — very low confidence'}]},
+  {id:'CSM-N10-0089',name:'N-10 Layout, Plot 89',lat:19.8755,lng:75.3375,
+   priority:'LOW',score:34,tax:'₹1,000',type:'Small Shed on Plot',detected:'30 Jan 2026',owner:'Anita Gosavi',
+   poly:[[19.8753,75.3373],[19.8757,75.3373],[19.8757,75.3378],[19.8753,75.3378]],
+   scores:[{l:'ChangeDetect',v:56},{l:'FootprintAI',v:44},{l:'HeightEstimator',v:40},{l:'UseClassifier',v:49}],
+   tl:[{d:'Jan 2026',e:'12 sqm storage shed detected'},
+       {d:'30 Jan 2026',e:'Flagged LOW'}]},
+  {id:'CSM-N10-0101',name:'N-10 Zone, Plot 101',lat:19.8762,lng:75.3365,
+   priority:'LOW',score:27,tax:'₹700',type:'Minor Canopy Addition',detected:'02 Feb 2026',owner:'Vikram Suryavanshi',
+   poly:[[19.8760,75.3363],[19.8764,75.3363],[19.8764,75.3368],[19.8760,75.3368]],
+   scores:[{l:'ChangeDetect',v:49},{l:'FootprintAI',v:38},{l:'HeightEstimator',v:34},{l:'UseClassifier',v:43}],
+   tl:[{d:'Jan 2026',e:'Canopy +3 sqm over gate'},
+       {d:'02 Feb 2026',e:'Flagged LOW'}]},
+  // ═══ REVIEW (5) ═══
   {id:'CSM-N6-0058',name:'N-6 East Wing, Plot 58',lat:19.8742,lng:75.3440,
    priority:'REVIEW',score:45,tax:'₹2,100',type:'Possible Floor Addition',detected:'28 Jan 2026',owner:'Sanjay Kulkarni',
    poly:[[19.8740,75.3438],[19.8744,75.3438],[19.8744,75.3443],[19.8740,75.3443]],
    scores:[{l:'ChangeDetect',v:67},{l:'FootprintAI',v:58},{l:'HeightEstimator',v:71},{l:'UseClassifier',v:55}],
    tl:[{d:'Feb 2025',e:'Possible floor addition — low confidence'},
        {d:'28 Jan 2026',e:'Sent to review queue'}]},
+  {id:'CSM-N2-0112',name:'N-2 Sector, Plot 112',lat:19.8802,lng:75.3448,
+   priority:'REVIEW',score:42,tax:'₹1,800',type:'Possible Use Conversion',detected:'30 Jan 2026',owner:'Rupali More',
+   poly:[[19.8800,75.3446],[19.8804,75.3446],[19.8804,75.3451],[19.8800,75.3451]],
+   scores:[{l:'ChangeDetect',v:63},{l:'FootprintAI',v:55},{l:'HeightEstimator',v:48},{l:'UseClassifier',v:68}],
+   tl:[{d:'Jan 2026',e:'Spectral signature change — use conversion uncertain'},
+       {d:'30 Jan 2026',e:'Sent to REVIEW — field officer to confirm'}]},
+  {id:'CSM-N4-0089',name:'N-4 Colony, Plot 89',lat:19.8775,lng:75.3482,
+   priority:'REVIEW',score:47,tax:'₹2,300',type:'Uncertain Structure Addition',detected:'29 Jan 2026',owner:'Dilip Kamble',
+   poly:[[19.8773,75.3480],[19.8777,75.3480],[19.8777,75.3485],[19.8773,75.3485]],
+   scores:[{l:'ChangeDetect',v:65},{l:'FootprintAI',v:60},{l:'HeightEstimator',v:57},{l:'UseClassifier',v:58}],
+   tl:[{d:'Jan 2026',e:'Low-confidence shadow change detected'},
+       {d:'29 Jan 2026',e:'Sent to REVIEW — pending field officer'}]},
+  {id:'CSM-N7-0112',name:'N-7 Zone, Plot 112',lat:19.8733,lng:75.3472,
+   priority:'REVIEW',score:43,tax:'₹1,900',type:'Possible Encroachment',detected:'01 Feb 2026',owner:'Girish Joshi',
+   poly:[[19.8731,75.3470],[19.8735,75.3470],[19.8735,75.3475],[19.8731,75.3475]],
+   scores:[{l:'ChangeDetect',v:64},{l:'FootprintAI',v:56},{l:'HeightEstimator',v:49},{l:'UseClassifier',v:60}],
+   tl:[{d:'Jan 2026',e:'Boundary irregularity detected'},
+       {d:'01 Feb 2026',e:'Sent to REVIEW — field verification pending'}]},
+  {id:'CSM-N9-0112',name:'N-9 Zone, Plot 112',lat:19.8738,lng:75.3410,
+   priority:'REVIEW',score:40,tax:'₹1,600',type:'Unclear Footprint Change',detected:'02 Feb 2026',owner:'Hemant Naik',
+   poly:[[19.8736,75.3408],[19.8740,75.3408],[19.8740,75.3413],[19.8736,75.3413]],
+   scores:[{l:'ChangeDetect',v:61},{l:'FootprintAI',v:53},{l:'HeightEstimator',v:47},{l:'UseClassifier',v:56}],
+   tl:[{d:'Jan 2026',e:'Footprint change detected — seasonal variation possible'},
+       {d:'02 Feb 2026',e:'Sent to REVIEW'}]},
+  // ═══ CLEARED (3) ═══
   {id:'CSM-N6-0019',name:'N-6 Plot 19 — Cleared',lat:19.8760,lng:75.3462,
    priority:'CLEARED',score:12,tax:'₹0',type:'False Positive — Permit Found',detected:'05 Jan 2026',owner:'Lakshmi Trust',
    poly:[[19.8758,75.3460],[19.8762,75.3460],[19.8762,75.3465],[19.8758,75.3465]],
    scores:[{l:'ChangeDetect',v:32},{l:'FootprintAI',v:21},{l:'HeightEstimator',v:18},{l:'UseClassifier',v:25}],
    tl:[{d:'05 Jan 2026',e:'Low-confidence signal detected'},
-       {d:'12 Jan 2026',e:'Field review: permit found — CLEARED'}]}
+       {d:'12 Jan 2026',e:'Field review: permit found — CLEARED'}]},
+  {id:'CSM-N3-0134',name:'N-3 Sector, Plot 134',lat:19.8788,lng:75.3468,
+   priority:'CLEARED',score:15,tax:'₹0',type:'False Positive — Shadow Artifact',detected:'08 Jan 2026',owner:'Lakshmi Nagar Trust',
+   poly:[[19.8786,75.3466],[19.8790,75.3466],[19.8790,75.3471],[19.8786,75.3471]],
+   scores:[{l:'ChangeDetect',v:35},{l:'FootprintAI',v:25},{l:'HeightEstimator',v:20},{l:'UseClassifier',v:28}],
+   tl:[{d:'08 Jan 2026',e:'Shadow artifact flagged as possible change'},
+       {d:'15 Jan 2026',e:'Re-scan confirmed false positive — CLEARED'}]},
+  {id:'CSM-N5-0112',name:'N-5 Zone, Plot 112',lat:19.8760,lng:75.3502,
+   priority:'CLEARED',score:10,tax:'₹0',type:'False Positive — Seasonal Vegetation',detected:'10 Jan 2026',owner:'City Garden Society',
+   poly:[[19.8758,75.3500],[19.8762,75.3500],[19.8762,75.3505],[19.8758,75.3505]],
+   scores:[{l:'ChangeDetect',v:28},{l:'FootprintAI',v:18},{l:'HeightEstimator',v:15},{l:'UseClassifier',v:22}],
+   tl:[{d:'10 Jan 2026',e:'Vegetation spectral change misclassified'},
+       {d:'18 Jan 2026',e:'Confirmed seasonal — CLEARED'}]}
 ];
 
 const NOTICES = [
@@ -1369,6 +1753,7 @@ function runPipeline(){
 // PRIORITY QUEUE
 // ══════════════════════════════════════════════════
 let qFilter='ALL',qSearch='',qSort={field:'score',dir:-1};
+let qPage=1,qPageSize=20;
 let tableData=[...PROPS];
 
 function renderTable(){
@@ -1380,10 +1765,15 @@ function renderTable(){
     if(typeof av==='string')return qSort.dir*(av.localeCompare(bv));
     return qSort.dir*(av-bv);
   });
+  const total=data.length;
+  const totalPages=Math.max(1,Math.ceil(total/qPageSize));
+  if(qPage>totalPages)qPage=totalPages;
+  const start=(qPage-1)*qPageSize;
+  const pageData=data.slice(start,start+qPageSize);
   const tb=document.getElementById('qtable');
   if(!tb)return;
   tb.innerHTML='';
-  data.forEach(p=>{
+  pageData.forEach(p=>{
     const c=PC[p.priority];
     const tr=document.createElement('tr');
     tr.onclick=()=>openModal(p.id);
@@ -1403,7 +1793,27 @@ function renderTable(){
       <td><button class="vbtn" onclick="event.stopPropagation();openModal('${p.id}')">${t('q.details')}</button></td>`;
     tb.appendChild(tr);
   });
+  renderPager(qPage,totalPages,total,start,Math.min(start+qPageSize,total));
 }
+
+function renderPager(page,totalPages,total,from,to){
+  const el=document.getElementById('qpager');if(!el)return;
+  const sp=Math.max(1,Math.min(page-2,totalPages-4));
+  const pages=Array.from({length:Math.min(5,totalPages)},(_,i)=>sp+i);
+  el.innerHTML=`
+    <div class="pgr-info">Showing ${from+1}–${to} of ${total} records</div>
+    <div class="pgr-ctrl">
+      <button onclick="setQPage(${page-1})"${page<=1?' disabled':''}>&#8249;</button>
+      ${pages.map(p=>`<button class="${p===page?'pgr-act':''}" onclick="setQPage(${p})">${p}</button>`).join('')}
+      <button onclick="setQPage(${page+1})"${page>=totalPages?' disabled':''}>&#8250;</button>
+    </div>
+    <div class="pgr-sz">Show:
+      <button class="${qPageSize===20?'pgr-act':''}" onclick="setQPageSize(20)">20</button>
+      <button class="${qPageSize===50?'pgr-act':''}" onclick="setQPageSize(50)">50</button>
+    </div>`;
+}
+function setQPage(p){if(p<1)return;qPage=p;renderTable();}
+function setQPageSize(s){qPageSize=s;qPage=1;renderTable();}
 
 function filterQ(f,el){
   qFilter=f;
